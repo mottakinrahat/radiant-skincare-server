@@ -1,0 +1,50 @@
+{
+  "name": "techntrove-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --poll --respawn --transpile-only src/server.ts",
+    "build": "prisma generate && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/mime-types": "^3.0.1",
+    "@types/node": "^24.3.1",
+    "@types/nodemailer": "^7.0.9",
+    "prisma": "^6.15.0",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1111.0",
+    "@prisma/client": "^6.15.0",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
+    "antigravity": "^0.0.0",
+    "axios": "^1.19.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "http-status": "^2.1.0",
+    "i": "^0.3.7",
+    "jsonwebtoken": "^9.0.2",
+    "mime-types": "^3.0.2",
+    "multer": "^2.0.2",
+    "nodemailer": "^8.0.0",
+    "npm": "^11.6.1",
+    "sslcommerz-lts": "^1.2.0",
+    "zod": "^4.1.9"
+  }
+}

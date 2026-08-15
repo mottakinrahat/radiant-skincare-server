@@ -1,0 +1,133 @@
+﻿import express from "express";
+import { userRoutes } from "../modules/User/user.routes";
+import { adminRoutes } from "../modules/admin/admin.routes";
+import { authRoutes } from "../modules/auth/auth.routes";
+import { ManagerRoutes } from "../modules/manager/manager.routes";
+import { buyerRoutes } from "../modules/buyer/buyer.routes";
+import { addressRoutes } from "../modules/address/address.routes";
+import { shippingAddressRoutes } from "../modules/shippingAddress/shippingAddress.routes";
+import { productRoutes } from "../modules/product/product.routes";
+import { categoryRoutes } from "../modules/category/category.routes";
+import { brandRoutes } from "../modules/brand/brand.routes";
+import { paymentRoutes } from "../modules/payment/payment.routes";
+import { cartRoutes } from "../modules/cart/cart.routes";
+import { orderRoutes } from "../modules/order/order.routes";
+import { reviewRoutes } from "../modules/review/review.routes";
+import { wishlistRoutes } from "../modules/wishlist/wishlist.routes";
+import { bannerRoutes } from "../modules/banner/banner.routes";
+import { discountRoutes } from "../modules/discount/discount.routes";
+import { storeSettingsRoutes } from "../modules/storeSettings/storeSettings.routes";
+import { geoRoutes } from "../modules/geo/geo.routes";
+import { CourierRoutes } from "../modules/courier/courier.routes";
+import { landingPageRoutes } from "../modules/landingPage/landingPage.routes";
+import { abandonedCartRoutes } from "../modules/abandonedCart/abandonedCart.routes";
+import { analyticsRoutes } from "../modules/analytics/analytics.routes";
+
+const router = express.Router();
+
+const moduleRouter = [
+  {
+    path: "/analytics",
+    route: analyticsRoutes,
+  },
+  {
+    path: "/abandoned-cart",
+    route: abandonedCartRoutes,
+  },
+  {
+    path: "/landing-page",
+    route: landingPageRoutes,
+  },
+  {
+    path: "/courier",
+    route: CourierRoutes,
+  },
+  {
+    path: "/geo",
+    route: geoRoutes,
+  },
+  {
+    path: "/user",
+    route: userRoutes,
+  },
+  {
+    path: "/admins",
+    route: adminRoutes,
+  },
+  {
+    path: "/auth",
+    route: authRoutes,
+  },
+  {
+    path: "/manager",
+    route: ManagerRoutes,
+  },
+  {
+    path: "/buyer",
+    route: buyerRoutes,
+  },
+  {
+    path: "/addresses",
+    route: addressRoutes,
+  },
+  {
+    path: "/shipping-addresses",
+    route: shippingAddressRoutes,
+  },
+  {
+    path: "/products",
+    route: productRoutes,
+  },
+  {
+    path: "/categories",
+    route: categoryRoutes,
+  },
+  {
+    path: "/category",
+    route: categoryRoutes,
+  },
+  {
+    path: "/brands",
+    route: brandRoutes,
+  },
+  {
+    path: "/brand",
+    route: brandRoutes,
+  },
+  {
+    path: "/payment",
+    route: paymentRoutes,
+  },
+  {
+    path: "/cart",
+    route: cartRoutes,
+  },
+  {
+    path: "/order",
+    route: orderRoutes,
+  },
+  {
+    path: "/reviews",
+    route: reviewRoutes,
+  },
+  {
+    path: "/wishlist",
+    route: wishlistRoutes,
+  },
+  {
+    path: "/banners",
+    route: bannerRoutes,
+  },
+  {
+    path: "/discounts",
+    route: discountRoutes,
+  },
+  {
+    path: "/store-settings",
+    route: storeSettingsRoutes,
+  },
+];
+
+moduleRouter.forEach((route) => router.use(route.path, route.route));
+
+export default router;

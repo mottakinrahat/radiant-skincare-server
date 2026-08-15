@@ -1,0 +1,42 @@
+import z from "zod";
+export const GenderEnum = z.enum(["MALE", "FEMALE"]);
+
+const createAdminValidation = z.object({
+
+    password: z.string().min(1, { message: "Password is required" }),
+    admin: z.object({
+      name: z.string().min(1, { message: "Name is required" }),
+      email: z
+        .string()
+        .email({ message: "Invalid email address" })
+        .min(1, { message: "Email is required" }),
+      contactNumber: z.string().min(1, { message: "Phone number is required" }),
+    }),
+  });
+
+const createManagerValidationSchema = z.object({
+
+     password: z.string().min(1, { message: "Password is required" }),
+  manager: z.object({
+    name: z.string().min(1, "Name is required"),
+    profilePhoto: z.string().url("Invalid photo URL").optional(),
+    contactNumber: z
+      .string()
+      .min(10, "Contact number must be at least 10 digits"),
+    email: z.string().email("Invalid email address"),
+  }),
+  });
+
+const createBuyerValidationSchema = z.object({
+  body: z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(1, "Password is required"),
+    contactNumber: z.string().optional(),
+  }),
+});
+export const UserValidation = {
+  createAdminValidation,
+  createManagerValidationSchema,
+  createBuyerValidationSchema,
+};
