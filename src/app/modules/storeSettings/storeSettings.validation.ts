@@ -19,10 +19,13 @@ const upsertSettings = z.object({
       socialLinks: z.record(z.string(), z.any()).optional().nullable(),
 
       // Pixels & Tracking
-      metaPixelId: z.string().optional().nullable(),
-      metaAccessToken: z.string().optional().nullable(),
-      tiktokPixelId: z.string().optional().nullable(),
-      tiktokAccessToken: z.string().optional().nullable(),
+      metaPixelId: optionalString,
+      metaAccessToken: optionalString,
+      metaTestEventCode: optionalString,
+      tiktokPixelId: optionalString,
+      tiktokAccessToken: optionalString,
+      tiktokTestEventCode: optionalString,
+      googlePixelId: optionalString,
 
       // Couriers
       steadfastApiKey: optionalString,

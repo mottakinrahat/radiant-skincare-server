@@ -467,7 +467,7 @@ const getProductAnalyticsList = async (
       slug: prod.slug,
       sku: prod.productSerial || undefined,
       imageUrl: prod.images?.[0]?.url || "/img-3.png",
-      categoryName: prod.category?.name || "Skincare",
+      categoryName: prod.category?.categoryName || "Skincare",
       sellingPrice: prod.sellingPrice || prod.regularPrice || 0,
       searches: stat.searches,
       totalViews: views,
@@ -607,7 +607,7 @@ const getSingleProductAnalytics = async (productId: string, filter: IAnalyticsFi
       imageUrl: product.images?.[0]?.url || "/img-3.png",
       price: product.sellingPrice || product.regularPrice || 0,
       stock: product.stock,
-      category: product.category?.name || "Skincare",
+      category: product.category?.categoryName || "Skincare",
     },
     metrics: {
       searches,

@@ -153,6 +153,11 @@ export type CourierShipmentHistory = $Result.DefaultSelection<Prisma.$CourierShi
  * 
  */
 export type ProductAnalyticsEvent = $Result.DefaultSelection<Prisma.$ProductAnalyticsEventPayload>
+/**
+ * Model StockMovement
+ * 
+ */
+export type StockMovement = $Result.DefaultSelection<Prisma.$StockMovementPayload>
 
 /**
  * Enums
@@ -258,6 +263,29 @@ export const AnalyticsEventType: {
 
 export type AnalyticsEventType = (typeof AnalyticsEventType)[keyof typeof AnalyticsEventType]
 
+
+export const StockChangeType: {
+  ADD: 'ADD',
+  DEDUCT: 'DEDUCT',
+  RESTORE: 'RESTORE',
+  ADJUST: 'ADJUST'
+};
+
+export type StockChangeType = (typeof StockChangeType)[keyof typeof StockChangeType]
+
+
+export const StockChangeSource: {
+  MANUAL_ADD: 'MANUAL_ADD',
+  ORDER_PLACED: 'ORDER_PLACED',
+  ORDER_CANCELLED: 'ORDER_CANCELLED',
+  ORDER_REFUNDED: 'ORDER_REFUNDED',
+  ORDER_RESHIPPED: 'ORDER_RESHIPPED',
+  MANUAL_ADJUSTMENT: 'MANUAL_ADJUSTMENT',
+  RETURN_RESTOCK: 'RETURN_RESTOCK'
+};
+
+export type StockChangeSource = (typeof StockChangeSource)[keyof typeof StockChangeSource]
+
 }
 
 export type DiscountType = $Enums.DiscountType
@@ -299,6 +327,14 @@ export const ProductStatus: typeof $Enums.ProductStatus
 export type AnalyticsEventType = $Enums.AnalyticsEventType
 
 export const AnalyticsEventType: typeof $Enums.AnalyticsEventType
+
+export type StockChangeType = $Enums.StockChangeType
+
+export const StockChangeType: typeof $Enums.StockChangeType
+
+export type StockChangeSource = $Enums.StockChangeSource
+
+export const StockChangeSource: typeof $Enums.StockChangeSource
 
 /**
  * ##  Prisma Client ʲˢ
@@ -697,6 +733,16 @@ export class PrismaClient<
     * ```
     */
   get productAnalyticsEvent(): Prisma.ProductAnalyticsEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.stockMovement`: Exposes CRUD operations for the **StockMovement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StockMovements
+    * const stockMovements = await prisma.stockMovement.findMany()
+    * ```
+    */
+  get stockMovement(): Prisma.StockMovementDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1164,7 +1210,8 @@ export namespace Prisma {
     LandingPage: 'LandingPage',
     AbandonedCart: 'AbandonedCart',
     CourierShipmentHistory: 'CourierShipmentHistory',
-    ProductAnalyticsEvent: 'ProductAnalyticsEvent'
+    ProductAnalyticsEvent: 'ProductAnalyticsEvent',
+    StockMovement: 'StockMovement'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1183,7 +1230,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userInfo" | "category" | "product" | "productDetail" | "brand" | "productVariant" | "productVariantOption" | "productVariantCombination" | "productVariantCombinationOption" | "productImage" | "order" | "shippingAddress" | "payment" | "orderItems" | "cart" | "cartItem" | "review" | "wishlist" | "banner" | "discount" | "discountProduct" | "discountCategory" | "storeSettings" | "landingPage" | "abandonedCart" | "courierShipmentHistory" | "productAnalyticsEvent"
+      modelProps: "user" | "userInfo" | "category" | "product" | "productDetail" | "brand" | "productVariant" | "productVariantOption" | "productVariantCombination" | "productVariantCombinationOption" | "productImage" | "order" | "shippingAddress" | "payment" | "orderItems" | "cart" | "cartItem" | "review" | "wishlist" | "banner" | "discount" | "discountProduct" | "discountCategory" | "storeSettings" | "landingPage" | "abandonedCart" | "courierShipmentHistory" | "productAnalyticsEvent" | "stockMovement"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3259,6 +3306,80 @@ export namespace Prisma {
           }
         }
       }
+      StockMovement: {
+        payload: Prisma.$StockMovementPayload<ExtArgs>
+        fields: Prisma.StockMovementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StockMovementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StockMovementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>
+          }
+          findFirst: {
+            args: Prisma.StockMovementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StockMovementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>
+          }
+          findMany: {
+            args: Prisma.StockMovementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>[]
+          }
+          create: {
+            args: Prisma.StockMovementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>
+          }
+          createMany: {
+            args: Prisma.StockMovementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StockMovementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>[]
+          }
+          delete: {
+            args: Prisma.StockMovementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>
+          }
+          update: {
+            args: Prisma.StockMovementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>
+          }
+          deleteMany: {
+            args: Prisma.StockMovementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StockMovementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StockMovementUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>[]
+          }
+          upsert: {
+            args: Prisma.StockMovementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StockMovementPayload>
+          }
+          aggregate: {
+            args: Prisma.StockMovementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStockMovement>
+          }
+          groupBy: {
+            args: Prisma.StockMovementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StockMovementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StockMovementCountArgs<ExtArgs>
+            result: $Utils.Optional<StockMovementCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3379,6 +3500,7 @@ export namespace Prisma {
     abandonedCart?: AbandonedCartOmit
     courierShipmentHistory?: CourierShipmentHistoryOmit
     productAnalyticsEvent?: ProductAnalyticsEventOmit
+    stockMovement?: StockMovementOmit
   }
 
   /* Types for Logging */
@@ -3576,6 +3698,7 @@ export namespace Prisma {
     details: number
     images: number
     analyticsEvents: number
+    stockMovements: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3589,6 +3712,7 @@ export namespace Prisma {
     details?: boolean | ProductCountOutputTypeCountDetailsArgs
     images?: boolean | ProductCountOutputTypeCountImagesArgs
     analyticsEvents?: boolean | ProductCountOutputTypeCountAnalyticsEventsArgs
+    stockMovements?: boolean | ProductCountOutputTypeCountStockMovementsArgs
   }
 
   // Custom InputTypes
@@ -3670,6 +3794,13 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountAnalyticsEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductAnalyticsEventWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountStockMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StockMovementWhereInput
   }
 
 
@@ -3774,12 +3905,14 @@ export namespace Prisma {
     options: number
     cartItems: number
     orderItems: number
+    stockMovements: number
   }
 
   export type ProductVariantCombinationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     options?: boolean | ProductVariantCombinationCountOutputTypeCountOptionsArgs
     cartItems?: boolean | ProductVariantCombinationCountOutputTypeCountCartItemsArgs
     orderItems?: boolean | ProductVariantCombinationCountOutputTypeCountOrderItemsArgs
+    stockMovements?: boolean | ProductVariantCombinationCountOutputTypeCountStockMovementsArgs
   }
 
   // Custom InputTypes
@@ -3812,6 +3945,13 @@ export namespace Prisma {
    */
   export type ProductVariantCombinationCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderItemsWhereInput
+  }
+
+  /**
+   * ProductVariantCombinationCountOutputType without action
+   */
+  export type ProductVariantCombinationCountOutputTypeCountStockMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StockMovementWhereInput
   }
 
 
@@ -7972,6 +8112,7 @@ export namespace Prisma {
     images?: boolean | Product$imagesArgs<ExtArgs>
     landingPage?: boolean | Product$landingPageArgs<ExtArgs>
     analyticsEvents?: boolean | Product$analyticsEventsArgs<ExtArgs>
+    stockMovements?: boolean | Product$stockMovementsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -8099,6 +8240,7 @@ export namespace Prisma {
     images?: boolean | Product$imagesArgs<ExtArgs>
     landingPage?: boolean | Product$landingPageArgs<ExtArgs>
     analyticsEvents?: boolean | Product$analyticsEventsArgs<ExtArgs>
+    stockMovements?: boolean | Product$stockMovementsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8129,6 +8271,7 @@ export namespace Prisma {
       images: Prisma.$ProductImagePayload<ExtArgs>[]
       landingPage: Prisma.$LandingPagePayload<ExtArgs> | null
       analyticsEvents: Prisma.$ProductAnalyticsEventPayload<ExtArgs>[]
+      stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8570,6 +8713,7 @@ export namespace Prisma {
     images<T extends Product$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Product$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     landingPage<T extends Product$landingPageArgs<ExtArgs> = {}>(args?: Subset<T, Product$landingPageArgs<ExtArgs>>): Prisma__LandingPageClient<$Result.GetResult<Prisma.$LandingPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     analyticsEvents<T extends Product$analyticsEventsArgs<ExtArgs> = {}>(args?: Subset<T, Product$analyticsEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnalyticsEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    stockMovements<T extends Product$stockMovementsArgs<ExtArgs> = {}>(args?: Subset<T, Product$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9301,6 +9445,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductAnalyticsEventScalarFieldEnum | ProductAnalyticsEventScalarFieldEnum[]
+  }
+
+  /**
+   * Product.stockMovements
+   */
+  export type Product$stockMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    where?: StockMovementWhereInput
+    orderBy?: StockMovementOrderByWithRelationInput | StockMovementOrderByWithRelationInput[]
+    cursor?: StockMovementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StockMovementScalarFieldEnum | StockMovementScalarFieldEnum[]
   }
 
   /**
@@ -14104,6 +14272,7 @@ export namespace Prisma {
     options?: boolean | ProductVariantCombination$optionsArgs<ExtArgs>
     cartItems?: boolean | ProductVariantCombination$cartItemsArgs<ExtArgs>
     orderItems?: boolean | ProductVariantCombination$orderItemsArgs<ExtArgs>
+    stockMovements?: boolean | ProductVariantCombination$stockMovementsArgs<ExtArgs>
     _count?: boolean | ProductVariantCombinationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariantCombination"]>
 
@@ -14151,6 +14320,7 @@ export namespace Prisma {
     options?: boolean | ProductVariantCombination$optionsArgs<ExtArgs>
     cartItems?: boolean | ProductVariantCombination$cartItemsArgs<ExtArgs>
     orderItems?: boolean | ProductVariantCombination$orderItemsArgs<ExtArgs>
+    stockMovements?: boolean | ProductVariantCombination$stockMovementsArgs<ExtArgs>
     _count?: boolean | ProductVariantCombinationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductVariantCombinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14167,6 +14337,7 @@ export namespace Prisma {
       options: Prisma.$ProductVariantCombinationOptionPayload<ExtArgs>[]
       cartItems: Prisma.$CartItemPayload<ExtArgs>[]
       orderItems: Prisma.$OrderItemsPayload<ExtArgs>[]
+      stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14576,6 +14747,7 @@ export namespace Prisma {
     options<T extends ProductVariantCombination$optionsArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariantCombination$optionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVariantCombinationOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cartItems<T extends ProductVariantCombination$cartItemsArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariantCombination$cartItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orderItems<T extends ProductVariantCombination$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariantCombination$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderItemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    stockMovements<T extends ProductVariantCombination$stockMovementsArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariantCombination$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15079,6 +15251,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OrderItemsScalarFieldEnum | OrderItemsScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVariantCombination.stockMovements
+   */
+  export type ProductVariantCombination$stockMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    where?: StockMovementWhereInput
+    orderBy?: StockMovementOrderByWithRelationInput | StockMovementOrderByWithRelationInput[]
+    cursor?: StockMovementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StockMovementScalarFieldEnum | StockMovementScalarFieldEnum[]
   }
 
   /**
@@ -31026,8 +31222,11 @@ export namespace Prisma {
     currencySymbol: string | null
     metaPixelId: string | null
     metaAccessToken: string | null
+    metaTestEventCode: string | null
     tiktokPixelId: string | null
     tiktokAccessToken: string | null
+    tiktokTestEventCode: string | null
+    googlePixelId: string | null
     steadfastApiKey: string | null
     steadfastSecretKey: string | null
     steadfastBaseUrl: string | null
@@ -31056,8 +31255,11 @@ export namespace Prisma {
     currencySymbol: string | null
     metaPixelId: string | null
     metaAccessToken: string | null
+    metaTestEventCode: string | null
     tiktokPixelId: string | null
     tiktokAccessToken: string | null
+    tiktokTestEventCode: string | null
+    googlePixelId: string | null
     steadfastApiKey: string | null
     steadfastSecretKey: string | null
     steadfastBaseUrl: string | null
@@ -31087,8 +31289,11 @@ export namespace Prisma {
     socialLinks: number
     metaPixelId: number
     metaAccessToken: number
+    metaTestEventCode: number
     tiktokPixelId: number
     tiktokAccessToken: number
+    tiktokTestEventCode: number
+    googlePixelId: number
     steadfastApiKey: number
     steadfastSecretKey: number
     steadfastBaseUrl: number
@@ -31119,8 +31324,11 @@ export namespace Prisma {
     currencySymbol?: true
     metaPixelId?: true
     metaAccessToken?: true
+    metaTestEventCode?: true
     tiktokPixelId?: true
     tiktokAccessToken?: true
+    tiktokTestEventCode?: true
+    googlePixelId?: true
     steadfastApiKey?: true
     steadfastSecretKey?: true
     steadfastBaseUrl?: true
@@ -31149,8 +31357,11 @@ export namespace Prisma {
     currencySymbol?: true
     metaPixelId?: true
     metaAccessToken?: true
+    metaTestEventCode?: true
     tiktokPixelId?: true
     tiktokAccessToken?: true
+    tiktokTestEventCode?: true
+    googlePixelId?: true
     steadfastApiKey?: true
     steadfastSecretKey?: true
     steadfastBaseUrl?: true
@@ -31180,8 +31391,11 @@ export namespace Prisma {
     socialLinks?: true
     metaPixelId?: true
     metaAccessToken?: true
+    metaTestEventCode?: true
     tiktokPixelId?: true
     tiktokAccessToken?: true
+    tiktokTestEventCode?: true
+    googlePixelId?: true
     steadfastApiKey?: true
     steadfastSecretKey?: true
     steadfastBaseUrl?: true
@@ -31284,8 +31498,11 @@ export namespace Prisma {
     socialLinks: JsonValue | null
     metaPixelId: string | null
     metaAccessToken: string | null
+    metaTestEventCode: string | null
     tiktokPixelId: string | null
     tiktokAccessToken: string | null
+    tiktokTestEventCode: string | null
+    googlePixelId: string | null
     steadfastApiKey: string | null
     steadfastSecretKey: string | null
     steadfastBaseUrl: string | null
@@ -31332,8 +31549,11 @@ export namespace Prisma {
     socialLinks?: boolean
     metaPixelId?: boolean
     metaAccessToken?: boolean
+    metaTestEventCode?: boolean
     tiktokPixelId?: boolean
     tiktokAccessToken?: boolean
+    tiktokTestEventCode?: boolean
+    googlePixelId?: boolean
     steadfastApiKey?: boolean
     steadfastSecretKey?: boolean
     steadfastBaseUrl?: boolean
@@ -31363,8 +31583,11 @@ export namespace Prisma {
     socialLinks?: boolean
     metaPixelId?: boolean
     metaAccessToken?: boolean
+    metaTestEventCode?: boolean
     tiktokPixelId?: boolean
     tiktokAccessToken?: boolean
+    tiktokTestEventCode?: boolean
+    googlePixelId?: boolean
     steadfastApiKey?: boolean
     steadfastSecretKey?: boolean
     steadfastBaseUrl?: boolean
@@ -31394,8 +31617,11 @@ export namespace Prisma {
     socialLinks?: boolean
     metaPixelId?: boolean
     metaAccessToken?: boolean
+    metaTestEventCode?: boolean
     tiktokPixelId?: boolean
     tiktokAccessToken?: boolean
+    tiktokTestEventCode?: boolean
+    googlePixelId?: boolean
     steadfastApiKey?: boolean
     steadfastSecretKey?: boolean
     steadfastBaseUrl?: boolean
@@ -31425,8 +31651,11 @@ export namespace Prisma {
     socialLinks?: boolean
     metaPixelId?: boolean
     metaAccessToken?: boolean
+    metaTestEventCode?: boolean
     tiktokPixelId?: boolean
     tiktokAccessToken?: boolean
+    tiktokTestEventCode?: boolean
+    googlePixelId?: boolean
     steadfastApiKey?: boolean
     steadfastSecretKey?: boolean
     steadfastBaseUrl?: boolean
@@ -31440,7 +31669,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StoreSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "storeName" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "accentColor" | "supportEmail" | "supportPhone" | "address" | "currency" | "currencySymbol" | "socialLinks" | "metaPixelId" | "metaAccessToken" | "tiktokPixelId" | "tiktokAccessToken" | "steadfastApiKey" | "steadfastSecretKey" | "steadfastBaseUrl" | "redxAccessToken" | "redxBaseUrl" | "pathaoClientId" | "pathaoClientSecret" | "pathaoUsername" | "pathaoPassword" | "fraudBdApiKey" | "updatedAt", ExtArgs["result"]["storeSettings"]>
+  export type StoreSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "storeName" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "accentColor" | "supportEmail" | "supportPhone" | "address" | "currency" | "currencySymbol" | "socialLinks" | "metaPixelId" | "metaAccessToken" | "metaTestEventCode" | "tiktokPixelId" | "tiktokAccessToken" | "tiktokTestEventCode" | "googlePixelId" | "steadfastApiKey" | "steadfastSecretKey" | "steadfastBaseUrl" | "redxAccessToken" | "redxBaseUrl" | "pathaoClientId" | "pathaoClientSecret" | "pathaoUsername" | "pathaoPassword" | "fraudBdApiKey" | "updatedAt", ExtArgs["result"]["storeSettings"]>
 
   export type $StoreSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StoreSettings"
@@ -31461,8 +31690,11 @@ export namespace Prisma {
       socialLinks: Prisma.JsonValue | null
       metaPixelId: string | null
       metaAccessToken: string | null
+      metaTestEventCode: string | null
       tiktokPixelId: string | null
       tiktokAccessToken: string | null
+      tiktokTestEventCode: string | null
+      googlePixelId: string | null
       steadfastApiKey: string | null
       steadfastSecretKey: string | null
       steadfastBaseUrl: string | null
@@ -31912,8 +32144,11 @@ export namespace Prisma {
     readonly socialLinks: FieldRef<"StoreSettings", 'Json'>
     readonly metaPixelId: FieldRef<"StoreSettings", 'String'>
     readonly metaAccessToken: FieldRef<"StoreSettings", 'String'>
+    readonly metaTestEventCode: FieldRef<"StoreSettings", 'String'>
     readonly tiktokPixelId: FieldRef<"StoreSettings", 'String'>
     readonly tiktokAccessToken: FieldRef<"StoreSettings", 'String'>
+    readonly tiktokTestEventCode: FieldRef<"StoreSettings", 'String'>
+    readonly googlePixelId: FieldRef<"StoreSettings", 'String'>
     readonly steadfastApiKey: FieldRef<"StoreSettings", 'String'>
     readonly steadfastSecretKey: FieldRef<"StoreSettings", 'String'>
     readonly steadfastBaseUrl: FieldRef<"StoreSettings", 'String'>
@@ -36923,6 +37158,1224 @@ export namespace Prisma {
 
 
   /**
+   * Model StockMovement
+   */
+
+  export type AggregateStockMovement = {
+    _count: StockMovementCountAggregateOutputType | null
+    _avg: StockMovementAvgAggregateOutputType | null
+    _sum: StockMovementSumAggregateOutputType | null
+    _min: StockMovementMinAggregateOutputType | null
+    _max: StockMovementMaxAggregateOutputType | null
+  }
+
+  export type StockMovementAvgAggregateOutputType = {
+    quantity: number | null
+    previousStock: number | null
+    newStock: number | null
+  }
+
+  export type StockMovementSumAggregateOutputType = {
+    quantity: number | null
+    previousStock: number | null
+    newStock: number | null
+  }
+
+  export type StockMovementMinAggregateOutputType = {
+    id: string | null
+    productId: string | null
+    variantId: string | null
+    changeType: $Enums.StockChangeType | null
+    quantity: number | null
+    previousStock: number | null
+    newStock: number | null
+    source: $Enums.StockChangeSource | null
+    referenceId: string | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StockMovementMaxAggregateOutputType = {
+    id: string | null
+    productId: string | null
+    variantId: string | null
+    changeType: $Enums.StockChangeType | null
+    quantity: number | null
+    previousStock: number | null
+    newStock: number | null
+    source: $Enums.StockChangeSource | null
+    referenceId: string | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StockMovementCountAggregateOutputType = {
+    id: number
+    productId: number
+    variantId: number
+    changeType: number
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: number
+    referenceId: number
+    note: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StockMovementAvgAggregateInputType = {
+    quantity?: true
+    previousStock?: true
+    newStock?: true
+  }
+
+  export type StockMovementSumAggregateInputType = {
+    quantity?: true
+    previousStock?: true
+    newStock?: true
+  }
+
+  export type StockMovementMinAggregateInputType = {
+    id?: true
+    productId?: true
+    variantId?: true
+    changeType?: true
+    quantity?: true
+    previousStock?: true
+    newStock?: true
+    source?: true
+    referenceId?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StockMovementMaxAggregateInputType = {
+    id?: true
+    productId?: true
+    variantId?: true
+    changeType?: true
+    quantity?: true
+    previousStock?: true
+    newStock?: true
+    source?: true
+    referenceId?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StockMovementCountAggregateInputType = {
+    id?: true
+    productId?: true
+    variantId?: true
+    changeType?: true
+    quantity?: true
+    previousStock?: true
+    newStock?: true
+    source?: true
+    referenceId?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StockMovementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StockMovement to aggregate.
+     */
+    where?: StockMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockMovements to fetch.
+     */
+    orderBy?: StockMovementOrderByWithRelationInput | StockMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StockMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockMovements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StockMovements
+    **/
+    _count?: true | StockMovementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StockMovementAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StockMovementSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StockMovementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StockMovementMaxAggregateInputType
+  }
+
+  export type GetStockMovementAggregateType<T extends StockMovementAggregateArgs> = {
+        [P in keyof T & keyof AggregateStockMovement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStockMovement[P]>
+      : GetScalarType<T[P], AggregateStockMovement[P]>
+  }
+
+
+
+
+  export type StockMovementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StockMovementWhereInput
+    orderBy?: StockMovementOrderByWithAggregationInput | StockMovementOrderByWithAggregationInput[]
+    by: StockMovementScalarFieldEnum[] | StockMovementScalarFieldEnum
+    having?: StockMovementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StockMovementCountAggregateInputType | true
+    _avg?: StockMovementAvgAggregateInputType
+    _sum?: StockMovementSumAggregateInputType
+    _min?: StockMovementMinAggregateInputType
+    _max?: StockMovementMaxAggregateInputType
+  }
+
+  export type StockMovementGroupByOutputType = {
+    id: string
+    productId: string
+    variantId: string | null
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId: string | null
+    note: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: StockMovementCountAggregateOutputType | null
+    _avg: StockMovementAvgAggregateOutputType | null
+    _sum: StockMovementSumAggregateOutputType | null
+    _min: StockMovementMinAggregateOutputType | null
+    _max: StockMovementMaxAggregateOutputType | null
+  }
+
+  type GetStockMovementGroupByPayload<T extends StockMovementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StockMovementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StockMovementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StockMovementGroupByOutputType[P]>
+            : GetScalarType<T[P], StockMovementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StockMovementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    changeType?: boolean
+    quantity?: boolean
+    previousStock?: boolean
+    newStock?: boolean
+    source?: boolean
+    referenceId?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    variant?: boolean | StockMovement$variantArgs<ExtArgs>
+  }, ExtArgs["result"]["stockMovement"]>
+
+  export type StockMovementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    changeType?: boolean
+    quantity?: boolean
+    previousStock?: boolean
+    newStock?: boolean
+    source?: boolean
+    referenceId?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    variant?: boolean | StockMovement$variantArgs<ExtArgs>
+  }, ExtArgs["result"]["stockMovement"]>
+
+  export type StockMovementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    changeType?: boolean
+    quantity?: boolean
+    previousStock?: boolean
+    newStock?: boolean
+    source?: boolean
+    referenceId?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    variant?: boolean | StockMovement$variantArgs<ExtArgs>
+  }, ExtArgs["result"]["stockMovement"]>
+
+  export type StockMovementSelectScalar = {
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    changeType?: boolean
+    quantity?: boolean
+    previousStock?: boolean
+    newStock?: boolean
+    source?: boolean
+    referenceId?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StockMovementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "variantId" | "changeType" | "quantity" | "previousStock" | "newStock" | "source" | "referenceId" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["stockMovement"]>
+  export type StockMovementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    variant?: boolean | StockMovement$variantArgs<ExtArgs>
+  }
+  export type StockMovementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    variant?: boolean | StockMovement$variantArgs<ExtArgs>
+  }
+  export type StockMovementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    variant?: boolean | StockMovement$variantArgs<ExtArgs>
+  }
+
+  export type $StockMovementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StockMovement"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>
+      variant: Prisma.$ProductVariantCombinationPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      productId: string
+      variantId: string | null
+      changeType: $Enums.StockChangeType
+      quantity: number
+      previousStock: number
+      newStock: number
+      source: $Enums.StockChangeSource
+      referenceId: string | null
+      note: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["stockMovement"]>
+    composites: {}
+  }
+
+  type StockMovementGetPayload<S extends boolean | null | undefined | StockMovementDefaultArgs> = $Result.GetResult<Prisma.$StockMovementPayload, S>
+
+  type StockMovementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StockMovementFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StockMovementCountAggregateInputType | true
+    }
+
+  export interface StockMovementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StockMovement'], meta: { name: 'StockMovement' } }
+    /**
+     * Find zero or one StockMovement that matches the filter.
+     * @param {StockMovementFindUniqueArgs} args - Arguments to find a StockMovement
+     * @example
+     * // Get one StockMovement
+     * const stockMovement = await prisma.stockMovement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StockMovementFindUniqueArgs>(args: SelectSubset<T, StockMovementFindUniqueArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StockMovement that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StockMovementFindUniqueOrThrowArgs} args - Arguments to find a StockMovement
+     * @example
+     * // Get one StockMovement
+     * const stockMovement = await prisma.stockMovement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StockMovementFindUniqueOrThrowArgs>(args: SelectSubset<T, StockMovementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StockMovement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementFindFirstArgs} args - Arguments to find a StockMovement
+     * @example
+     * // Get one StockMovement
+     * const stockMovement = await prisma.stockMovement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StockMovementFindFirstArgs>(args?: SelectSubset<T, StockMovementFindFirstArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StockMovement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementFindFirstOrThrowArgs} args - Arguments to find a StockMovement
+     * @example
+     * // Get one StockMovement
+     * const stockMovement = await prisma.stockMovement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StockMovementFindFirstOrThrowArgs>(args?: SelectSubset<T, StockMovementFindFirstOrThrowArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StockMovements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StockMovements
+     * const stockMovements = await prisma.stockMovement.findMany()
+     * 
+     * // Get first 10 StockMovements
+     * const stockMovements = await prisma.stockMovement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const stockMovementWithIdOnly = await prisma.stockMovement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StockMovementFindManyArgs>(args?: SelectSubset<T, StockMovementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StockMovement.
+     * @param {StockMovementCreateArgs} args - Arguments to create a StockMovement.
+     * @example
+     * // Create one StockMovement
+     * const StockMovement = await prisma.stockMovement.create({
+     *   data: {
+     *     // ... data to create a StockMovement
+     *   }
+     * })
+     * 
+     */
+    create<T extends StockMovementCreateArgs>(args: SelectSubset<T, StockMovementCreateArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StockMovements.
+     * @param {StockMovementCreateManyArgs} args - Arguments to create many StockMovements.
+     * @example
+     * // Create many StockMovements
+     * const stockMovement = await prisma.stockMovement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StockMovementCreateManyArgs>(args?: SelectSubset<T, StockMovementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StockMovements and returns the data saved in the database.
+     * @param {StockMovementCreateManyAndReturnArgs} args - Arguments to create many StockMovements.
+     * @example
+     * // Create many StockMovements
+     * const stockMovement = await prisma.stockMovement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StockMovements and only return the `id`
+     * const stockMovementWithIdOnly = await prisma.stockMovement.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StockMovementCreateManyAndReturnArgs>(args?: SelectSubset<T, StockMovementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StockMovement.
+     * @param {StockMovementDeleteArgs} args - Arguments to delete one StockMovement.
+     * @example
+     * // Delete one StockMovement
+     * const StockMovement = await prisma.stockMovement.delete({
+     *   where: {
+     *     // ... filter to delete one StockMovement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StockMovementDeleteArgs>(args: SelectSubset<T, StockMovementDeleteArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StockMovement.
+     * @param {StockMovementUpdateArgs} args - Arguments to update one StockMovement.
+     * @example
+     * // Update one StockMovement
+     * const stockMovement = await prisma.stockMovement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StockMovementUpdateArgs>(args: SelectSubset<T, StockMovementUpdateArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StockMovements.
+     * @param {StockMovementDeleteManyArgs} args - Arguments to filter StockMovements to delete.
+     * @example
+     * // Delete a few StockMovements
+     * const { count } = await prisma.stockMovement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StockMovementDeleteManyArgs>(args?: SelectSubset<T, StockMovementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StockMovements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StockMovements
+     * const stockMovement = await prisma.stockMovement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StockMovementUpdateManyArgs>(args: SelectSubset<T, StockMovementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StockMovements and returns the data updated in the database.
+     * @param {StockMovementUpdateManyAndReturnArgs} args - Arguments to update many StockMovements.
+     * @example
+     * // Update many StockMovements
+     * const stockMovement = await prisma.stockMovement.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StockMovements and only return the `id`
+     * const stockMovementWithIdOnly = await prisma.stockMovement.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StockMovementUpdateManyAndReturnArgs>(args: SelectSubset<T, StockMovementUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StockMovement.
+     * @param {StockMovementUpsertArgs} args - Arguments to update or create a StockMovement.
+     * @example
+     * // Update or create a StockMovement
+     * const stockMovement = await prisma.stockMovement.upsert({
+     *   create: {
+     *     // ... data to create a StockMovement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StockMovement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StockMovementUpsertArgs>(args: SelectSubset<T, StockMovementUpsertArgs<ExtArgs>>): Prisma__StockMovementClient<$Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StockMovements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementCountArgs} args - Arguments to filter StockMovements to count.
+     * @example
+     * // Count the number of StockMovements
+     * const count = await prisma.stockMovement.count({
+     *   where: {
+     *     // ... the filter for the StockMovements we want to count
+     *   }
+     * })
+    **/
+    count<T extends StockMovementCountArgs>(
+      args?: Subset<T, StockMovementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StockMovementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StockMovement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StockMovementAggregateArgs>(args: Subset<T, StockMovementAggregateArgs>): Prisma.PrismaPromise<GetStockMovementAggregateType<T>>
+
+    /**
+     * Group by StockMovement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StockMovementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StockMovementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StockMovementGroupByArgs['orderBy'] }
+        : { orderBy?: StockMovementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StockMovementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStockMovementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StockMovement model
+   */
+  readonly fields: StockMovementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StockMovement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StockMovementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    variant<T extends StockMovement$variantArgs<ExtArgs> = {}>(args?: Subset<T, StockMovement$variantArgs<ExtArgs>>): Prisma__ProductVariantCombinationClient<$Result.GetResult<Prisma.$ProductVariantCombinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StockMovement model
+   */
+  interface StockMovementFieldRefs {
+    readonly id: FieldRef<"StockMovement", 'String'>
+    readonly productId: FieldRef<"StockMovement", 'String'>
+    readonly variantId: FieldRef<"StockMovement", 'String'>
+    readonly changeType: FieldRef<"StockMovement", 'StockChangeType'>
+    readonly quantity: FieldRef<"StockMovement", 'Int'>
+    readonly previousStock: FieldRef<"StockMovement", 'Int'>
+    readonly newStock: FieldRef<"StockMovement", 'Int'>
+    readonly source: FieldRef<"StockMovement", 'StockChangeSource'>
+    readonly referenceId: FieldRef<"StockMovement", 'String'>
+    readonly note: FieldRef<"StockMovement", 'String'>
+    readonly createdAt: FieldRef<"StockMovement", 'DateTime'>
+    readonly updatedAt: FieldRef<"StockMovement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StockMovement findUnique
+   */
+  export type StockMovementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which StockMovement to fetch.
+     */
+    where: StockMovementWhereUniqueInput
+  }
+
+  /**
+   * StockMovement findUniqueOrThrow
+   */
+  export type StockMovementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which StockMovement to fetch.
+     */
+    where: StockMovementWhereUniqueInput
+  }
+
+  /**
+   * StockMovement findFirst
+   */
+  export type StockMovementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which StockMovement to fetch.
+     */
+    where?: StockMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockMovements to fetch.
+     */
+    orderBy?: StockMovementOrderByWithRelationInput | StockMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StockMovements.
+     */
+    cursor?: StockMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockMovements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StockMovements.
+     */
+    distinct?: StockMovementScalarFieldEnum | StockMovementScalarFieldEnum[]
+  }
+
+  /**
+   * StockMovement findFirstOrThrow
+   */
+  export type StockMovementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which StockMovement to fetch.
+     */
+    where?: StockMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockMovements to fetch.
+     */
+    orderBy?: StockMovementOrderByWithRelationInput | StockMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StockMovements.
+     */
+    cursor?: StockMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockMovements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StockMovements.
+     */
+    distinct?: StockMovementScalarFieldEnum | StockMovementScalarFieldEnum[]
+  }
+
+  /**
+   * StockMovement findMany
+   */
+  export type StockMovementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * Filter, which StockMovements to fetch.
+     */
+    where?: StockMovementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StockMovements to fetch.
+     */
+    orderBy?: StockMovementOrderByWithRelationInput | StockMovementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StockMovements.
+     */
+    cursor?: StockMovementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StockMovements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StockMovements.
+     */
+    skip?: number
+    distinct?: StockMovementScalarFieldEnum | StockMovementScalarFieldEnum[]
+  }
+
+  /**
+   * StockMovement create
+   */
+  export type StockMovementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StockMovement.
+     */
+    data: XOR<StockMovementCreateInput, StockMovementUncheckedCreateInput>
+  }
+
+  /**
+   * StockMovement createMany
+   */
+  export type StockMovementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StockMovements.
+     */
+    data: StockMovementCreateManyInput | StockMovementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StockMovement createManyAndReturn
+   */
+  export type StockMovementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * The data used to create many StockMovements.
+     */
+    data: StockMovementCreateManyInput | StockMovementCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StockMovement update
+   */
+  export type StockMovementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StockMovement.
+     */
+    data: XOR<StockMovementUpdateInput, StockMovementUncheckedUpdateInput>
+    /**
+     * Choose, which StockMovement to update.
+     */
+    where: StockMovementWhereUniqueInput
+  }
+
+  /**
+   * StockMovement updateMany
+   */
+  export type StockMovementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StockMovements.
+     */
+    data: XOR<StockMovementUpdateManyMutationInput, StockMovementUncheckedUpdateManyInput>
+    /**
+     * Filter which StockMovements to update
+     */
+    where?: StockMovementWhereInput
+    /**
+     * Limit how many StockMovements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StockMovement updateManyAndReturn
+   */
+  export type StockMovementUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * The data used to update StockMovements.
+     */
+    data: XOR<StockMovementUpdateManyMutationInput, StockMovementUncheckedUpdateManyInput>
+    /**
+     * Filter which StockMovements to update
+     */
+    where?: StockMovementWhereInput
+    /**
+     * Limit how many StockMovements to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StockMovement upsert
+   */
+  export type StockMovementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StockMovement to update in case it exists.
+     */
+    where: StockMovementWhereUniqueInput
+    /**
+     * In case the StockMovement found by the `where` argument doesn't exist, create a new StockMovement with this data.
+     */
+    create: XOR<StockMovementCreateInput, StockMovementUncheckedCreateInput>
+    /**
+     * In case the StockMovement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StockMovementUpdateInput, StockMovementUncheckedUpdateInput>
+  }
+
+  /**
+   * StockMovement delete
+   */
+  export type StockMovementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+    /**
+     * Filter which StockMovement to delete.
+     */
+    where: StockMovementWhereUniqueInput
+  }
+
+  /**
+   * StockMovement deleteMany
+   */
+  export type StockMovementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StockMovements to delete
+     */
+    where?: StockMovementWhereInput
+    /**
+     * Limit how many StockMovements to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StockMovement.variant
+   */
+  export type StockMovement$variantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVariantCombination
+     */
+    select?: ProductVariantCombinationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVariantCombination
+     */
+    omit?: ProductVariantCombinationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVariantCombinationInclude<ExtArgs> | null
+    where?: ProductVariantCombinationWhereInput
+  }
+
+  /**
+   * StockMovement without action
+   */
+  export type StockMovementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StockMovement
+     */
+    select?: StockMovementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StockMovement
+     */
+    omit?: StockMovementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StockMovementInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -37300,8 +38753,11 @@ export namespace Prisma {
     socialLinks: 'socialLinks',
     metaPixelId: 'metaPixelId',
     metaAccessToken: 'metaAccessToken',
+    metaTestEventCode: 'metaTestEventCode',
     tiktokPixelId: 'tiktokPixelId',
     tiktokAccessToken: 'tiktokAccessToken',
+    tiktokTestEventCode: 'tiktokTestEventCode',
+    googlePixelId: 'googlePixelId',
     steadfastApiKey: 'steadfastApiKey',
     steadfastSecretKey: 'steadfastSecretKey',
     steadfastBaseUrl: 'steadfastBaseUrl',
@@ -37390,6 +38846,24 @@ export namespace Prisma {
   };
 
   export type ProductAnalyticsEventScalarFieldEnum = (typeof ProductAnalyticsEventScalarFieldEnum)[keyof typeof ProductAnalyticsEventScalarFieldEnum]
+
+
+  export const StockMovementScalarFieldEnum: {
+    id: 'id',
+    productId: 'productId',
+    variantId: 'variantId',
+    changeType: 'changeType',
+    quantity: 'quantity',
+    previousStock: 'previousStock',
+    newStock: 'newStock',
+    source: 'source',
+    referenceId: 'referenceId',
+    note: 'note',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -37645,6 +39119,34 @@ export namespace Prisma {
    * Reference to a field of type 'AnalyticsEventType[]'
    */
   export type ListEnumAnalyticsEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AnalyticsEventType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'StockChangeType'
+   */
+  export type EnumStockChangeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockChangeType'>
+    
+
+
+  /**
+   * Reference to a field of type 'StockChangeType[]'
+   */
+  export type ListEnumStockChangeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockChangeType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'StockChangeSource'
+   */
+  export type EnumStockChangeSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockChangeSource'>
+    
+
+
+  /**
+   * Reference to a field of type 'StockChangeSource[]'
+   */
+  export type ListEnumStockChangeSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockChangeSource[]'>
     
   /**
    * Deep Input Types
@@ -37971,6 +39473,7 @@ export namespace Prisma {
     images?: ProductImageListRelationFilter
     landingPage?: XOR<LandingPageNullableScalarRelationFilter, LandingPageWhereInput> | null
     analyticsEvents?: ProductAnalyticsEventListRelationFilter
+    stockMovements?: StockMovementListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -38019,6 +39522,7 @@ export namespace Prisma {
     images?: ProductImageOrderByRelationAggregateInput
     landingPage?: LandingPageOrderByWithRelationInput
     analyticsEvents?: ProductAnalyticsEventOrderByRelationAggregateInput
+    stockMovements?: StockMovementOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -38070,6 +39574,7 @@ export namespace Prisma {
     images?: ProductImageListRelationFilter
     landingPage?: XOR<LandingPageNullableScalarRelationFilter, LandingPageWhereInput> | null
     analyticsEvents?: ProductAnalyticsEventListRelationFilter
+    stockMovements?: StockMovementListRelationFilter
   }, "id" | "slug">
 
   export type ProductOrderByWithAggregationInput = {
@@ -38447,6 +39952,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionListRelationFilter
     cartItems?: CartItemListRelationFilter
     orderItems?: OrderItemsListRelationFilter
+    stockMovements?: StockMovementListRelationFilter
   }
 
   export type ProductVariantCombinationOrderByWithRelationInput = {
@@ -38463,6 +39969,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionOrderByRelationAggregateInput
     cartItems?: CartItemOrderByRelationAggregateInput
     orderItems?: OrderItemsOrderByRelationAggregateInput
+    stockMovements?: StockMovementOrderByRelationAggregateInput
   }
 
   export type ProductVariantCombinationWhereUniqueInput = Prisma.AtLeast<{
@@ -38482,6 +39989,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionListRelationFilter
     cartItems?: CartItemListRelationFilter
     orderItems?: OrderItemsListRelationFilter
+    stockMovements?: StockMovementListRelationFilter
   }, "id" | "sku">
 
   export type ProductVariantCombinationOrderByWithAggregationInput = {
@@ -39567,8 +41075,11 @@ export namespace Prisma {
     socialLinks?: JsonNullableFilter<"StoreSettings">
     metaPixelId?: StringNullableFilter<"StoreSettings"> | string | null
     metaAccessToken?: StringNullableFilter<"StoreSettings"> | string | null
+    metaTestEventCode?: StringNullableFilter<"StoreSettings"> | string | null
     tiktokPixelId?: StringNullableFilter<"StoreSettings"> | string | null
     tiktokAccessToken?: StringNullableFilter<"StoreSettings"> | string | null
+    tiktokTestEventCode?: StringNullableFilter<"StoreSettings"> | string | null
+    googlePixelId?: StringNullableFilter<"StoreSettings"> | string | null
     steadfastApiKey?: StringNullableFilter<"StoreSettings"> | string | null
     steadfastSecretKey?: StringNullableFilter<"StoreSettings"> | string | null
     steadfastBaseUrl?: StringNullableFilter<"StoreSettings"> | string | null
@@ -39598,8 +41109,11 @@ export namespace Prisma {
     socialLinks?: SortOrderInput | SortOrder
     metaPixelId?: SortOrderInput | SortOrder
     metaAccessToken?: SortOrderInput | SortOrder
+    metaTestEventCode?: SortOrderInput | SortOrder
     tiktokPixelId?: SortOrderInput | SortOrder
     tiktokAccessToken?: SortOrderInput | SortOrder
+    tiktokTestEventCode?: SortOrderInput | SortOrder
+    googlePixelId?: SortOrderInput | SortOrder
     steadfastApiKey?: SortOrderInput | SortOrder
     steadfastSecretKey?: SortOrderInput | SortOrder
     steadfastBaseUrl?: SortOrderInput | SortOrder
@@ -39632,8 +41146,11 @@ export namespace Prisma {
     socialLinks?: JsonNullableFilter<"StoreSettings">
     metaPixelId?: StringNullableFilter<"StoreSettings"> | string | null
     metaAccessToken?: StringNullableFilter<"StoreSettings"> | string | null
+    metaTestEventCode?: StringNullableFilter<"StoreSettings"> | string | null
     tiktokPixelId?: StringNullableFilter<"StoreSettings"> | string | null
     tiktokAccessToken?: StringNullableFilter<"StoreSettings"> | string | null
+    tiktokTestEventCode?: StringNullableFilter<"StoreSettings"> | string | null
+    googlePixelId?: StringNullableFilter<"StoreSettings"> | string | null
     steadfastApiKey?: StringNullableFilter<"StoreSettings"> | string | null
     steadfastSecretKey?: StringNullableFilter<"StoreSettings"> | string | null
     steadfastBaseUrl?: StringNullableFilter<"StoreSettings"> | string | null
@@ -39663,8 +41180,11 @@ export namespace Prisma {
     socialLinks?: SortOrderInput | SortOrder
     metaPixelId?: SortOrderInput | SortOrder
     metaAccessToken?: SortOrderInput | SortOrder
+    metaTestEventCode?: SortOrderInput | SortOrder
     tiktokPixelId?: SortOrderInput | SortOrder
     tiktokAccessToken?: SortOrderInput | SortOrder
+    tiktokTestEventCode?: SortOrderInput | SortOrder
+    googlePixelId?: SortOrderInput | SortOrder
     steadfastApiKey?: SortOrderInput | SortOrder
     steadfastSecretKey?: SortOrderInput | SortOrder
     steadfastBaseUrl?: SortOrderInput | SortOrder
@@ -39700,8 +41220,11 @@ export namespace Prisma {
     socialLinks?: JsonNullableWithAggregatesFilter<"StoreSettings">
     metaPixelId?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
     metaAccessToken?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
+    metaTestEventCode?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
     tiktokPixelId?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
     tiktokAccessToken?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
+    tiktokTestEventCode?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
+    googlePixelId?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
     steadfastApiKey?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
     steadfastSecretKey?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
     steadfastBaseUrl?: StringNullableWithAggregatesFilter<"StoreSettings"> | string | null
@@ -40086,6 +41609,101 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ProductAnalyticsEvent"> | Date | string
   }
 
+  export type StockMovementWhereInput = {
+    AND?: StockMovementWhereInput | StockMovementWhereInput[]
+    OR?: StockMovementWhereInput[]
+    NOT?: StockMovementWhereInput | StockMovementWhereInput[]
+    id?: StringFilter<"StockMovement"> | string
+    productId?: StringFilter<"StockMovement"> | string
+    variantId?: StringNullableFilter<"StockMovement"> | string | null
+    changeType?: EnumStockChangeTypeFilter<"StockMovement"> | $Enums.StockChangeType
+    quantity?: IntFilter<"StockMovement"> | number
+    previousStock?: IntFilter<"StockMovement"> | number
+    newStock?: IntFilter<"StockMovement"> | number
+    source?: EnumStockChangeSourceFilter<"StockMovement"> | $Enums.StockChangeSource
+    referenceId?: StringNullableFilter<"StockMovement"> | string | null
+    note?: StringNullableFilter<"StockMovement"> | string | null
+    createdAt?: DateTimeFilter<"StockMovement"> | Date | string
+    updatedAt?: DateTimeFilter<"StockMovement"> | Date | string
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    variant?: XOR<ProductVariantCombinationNullableScalarRelationFilter, ProductVariantCombinationWhereInput> | null
+  }
+
+  export type StockMovementOrderByWithRelationInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrderInput | SortOrder
+    changeType?: SortOrder
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+    source?: SortOrder
+    referenceId?: SortOrderInput | SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    product?: ProductOrderByWithRelationInput
+    variant?: ProductVariantCombinationOrderByWithRelationInput
+  }
+
+  export type StockMovementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StockMovementWhereInput | StockMovementWhereInput[]
+    OR?: StockMovementWhereInput[]
+    NOT?: StockMovementWhereInput | StockMovementWhereInput[]
+    productId?: StringFilter<"StockMovement"> | string
+    variantId?: StringNullableFilter<"StockMovement"> | string | null
+    changeType?: EnumStockChangeTypeFilter<"StockMovement"> | $Enums.StockChangeType
+    quantity?: IntFilter<"StockMovement"> | number
+    previousStock?: IntFilter<"StockMovement"> | number
+    newStock?: IntFilter<"StockMovement"> | number
+    source?: EnumStockChangeSourceFilter<"StockMovement"> | $Enums.StockChangeSource
+    referenceId?: StringNullableFilter<"StockMovement"> | string | null
+    note?: StringNullableFilter<"StockMovement"> | string | null
+    createdAt?: DateTimeFilter<"StockMovement"> | Date | string
+    updatedAt?: DateTimeFilter<"StockMovement"> | Date | string
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    variant?: XOR<ProductVariantCombinationNullableScalarRelationFilter, ProductVariantCombinationWhereInput> | null
+  }, "id">
+
+  export type StockMovementOrderByWithAggregationInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrderInput | SortOrder
+    changeType?: SortOrder
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+    source?: SortOrder
+    referenceId?: SortOrderInput | SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StockMovementCountOrderByAggregateInput
+    _avg?: StockMovementAvgOrderByAggregateInput
+    _max?: StockMovementMaxOrderByAggregateInput
+    _min?: StockMovementMinOrderByAggregateInput
+    _sum?: StockMovementSumOrderByAggregateInput
+  }
+
+  export type StockMovementScalarWhereWithAggregatesInput = {
+    AND?: StockMovementScalarWhereWithAggregatesInput | StockMovementScalarWhereWithAggregatesInput[]
+    OR?: StockMovementScalarWhereWithAggregatesInput[]
+    NOT?: StockMovementScalarWhereWithAggregatesInput | StockMovementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StockMovement"> | string
+    productId?: StringWithAggregatesFilter<"StockMovement"> | string
+    variantId?: StringNullableWithAggregatesFilter<"StockMovement"> | string | null
+    changeType?: EnumStockChangeTypeWithAggregatesFilter<"StockMovement"> | $Enums.StockChangeType
+    quantity?: IntWithAggregatesFilter<"StockMovement"> | number
+    previousStock?: IntWithAggregatesFilter<"StockMovement"> | number
+    newStock?: IntWithAggregatesFilter<"StockMovement"> | number
+    source?: EnumStockChangeSourceWithAggregatesFilter<"StockMovement"> | $Enums.StockChangeSource
+    referenceId?: StringNullableWithAggregatesFilter<"StockMovement"> | string | null
+    note?: StringNullableWithAggregatesFilter<"StockMovement"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StockMovement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StockMovement"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -40451,6 +42069,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -40496,6 +42115,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -40541,6 +42161,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -40586,6 +42207,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -41003,6 +42625,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionCreateNestedManyWithoutCombinationInput
     cartItems?: CartItemCreateNestedManyWithoutVariantInput
     orderItems?: OrderItemsCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationUncheckedCreateInput = {
@@ -41018,6 +42641,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionUncheckedCreateNestedManyWithoutCombinationInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutVariantInput
     orderItems?: OrderItemsUncheckedCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationUpdateInput = {
@@ -41033,6 +42657,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionUpdateManyWithoutCombinationNestedInput
     cartItems?: CartItemUpdateManyWithoutVariantNestedInput
     orderItems?: OrderItemsUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationUncheckedUpdateInput = {
@@ -41048,6 +42673,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionUncheckedUpdateManyWithoutCombinationNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutVariantNestedInput
     orderItems?: OrderItemsUncheckedUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationCreateManyInput = {
@@ -42160,8 +43786,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: string | null
     metaAccessToken?: string | null
+    metaTestEventCode?: string | null
     tiktokPixelId?: string | null
     tiktokAccessToken?: string | null
+    tiktokTestEventCode?: string | null
+    googlePixelId?: string | null
     steadfastApiKey?: string | null
     steadfastSecretKey?: string | null
     steadfastBaseUrl?: string | null
@@ -42191,8 +43820,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: string | null
     metaAccessToken?: string | null
+    metaTestEventCode?: string | null
     tiktokPixelId?: string | null
     tiktokAccessToken?: string | null
+    tiktokTestEventCode?: string | null
+    googlePixelId?: string | null
     steadfastApiKey?: string | null
     steadfastSecretKey?: string | null
     steadfastBaseUrl?: string | null
@@ -42222,8 +43854,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     metaAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePixelId?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastSecretKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastBaseUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42253,8 +43888,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     metaAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePixelId?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastSecretKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastBaseUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42284,8 +43922,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: string | null
     metaAccessToken?: string | null
+    metaTestEventCode?: string | null
     tiktokPixelId?: string | null
     tiktokAccessToken?: string | null
+    tiktokTestEventCode?: string | null
+    googlePixelId?: string | null
     steadfastApiKey?: string | null
     steadfastSecretKey?: string | null
     steadfastBaseUrl?: string | null
@@ -42315,8 +43956,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     metaAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePixelId?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastSecretKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastBaseUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42346,8 +43990,11 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     metaPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     metaAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokPixelId?: NullableStringFieldUpdateOperationsInput | string | null
     tiktokAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    tiktokTestEventCode?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePixelId?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastSecretKey?: NullableStringFieldUpdateOperationsInput | string | null
     steadfastBaseUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42790,6 +44437,109 @@ export namespace Prisma {
     searchQuery?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockMovementCreateInput = {
+    id?: string
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutStockMovementsInput
+    variant?: ProductVariantCombinationCreateNestedOneWithoutStockMovementsInput
+  }
+
+  export type StockMovementUncheckedCreateInput = {
+    id?: string
+    productId: string
+    variantId?: string | null
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StockMovementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutStockMovementsNestedInput
+    variant?: ProductVariantCombinationUpdateOneWithoutStockMovementsNestedInput
+  }
+
+  export type StockMovementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockMovementCreateManyInput = {
+    id?: string
+    productId: string
+    variantId?: string | null
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StockMovementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockMovementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -43314,6 +45064,12 @@ export namespace Prisma {
     none?: ProductAnalyticsEventWhereInput
   }
 
+  export type StockMovementListRelationFilter = {
+    every?: StockMovementWhereInput
+    some?: StockMovementWhereInput
+    none?: StockMovementWhereInput
+  }
+
   export type CartItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -43343,6 +45099,10 @@ export namespace Prisma {
   }
 
   export type ProductAnalyticsEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StockMovementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -44534,8 +46294,11 @@ export namespace Prisma {
     socialLinks?: SortOrder
     metaPixelId?: SortOrder
     metaAccessToken?: SortOrder
+    metaTestEventCode?: SortOrder
     tiktokPixelId?: SortOrder
     tiktokAccessToken?: SortOrder
+    tiktokTestEventCode?: SortOrder
+    googlePixelId?: SortOrder
     steadfastApiKey?: SortOrder
     steadfastSecretKey?: SortOrder
     steadfastBaseUrl?: SortOrder
@@ -44564,8 +46327,11 @@ export namespace Prisma {
     currencySymbol?: SortOrder
     metaPixelId?: SortOrder
     metaAccessToken?: SortOrder
+    metaTestEventCode?: SortOrder
     tiktokPixelId?: SortOrder
     tiktokAccessToken?: SortOrder
+    tiktokTestEventCode?: SortOrder
+    googlePixelId?: SortOrder
     steadfastApiKey?: SortOrder
     steadfastSecretKey?: SortOrder
     steadfastBaseUrl?: SortOrder
@@ -44594,8 +46360,11 @@ export namespace Prisma {
     currencySymbol?: SortOrder
     metaPixelId?: SortOrder
     metaAccessToken?: SortOrder
+    metaTestEventCode?: SortOrder
     tiktokPixelId?: SortOrder
     tiktokAccessToken?: SortOrder
+    tiktokTestEventCode?: SortOrder
+    googlePixelId?: SortOrder
     steadfastApiKey?: SortOrder
     steadfastSecretKey?: SortOrder
     steadfastBaseUrl?: SortOrder
@@ -44828,6 +46597,97 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAnalyticsEventTypeFilter<$PrismaModel>
     _max?: NestedEnumAnalyticsEventTypeFilter<$PrismaModel>
+  }
+
+  export type EnumStockChangeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeType | EnumStockChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeTypeFilter<$PrismaModel> | $Enums.StockChangeType
+  }
+
+  export type EnumStockChangeSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeSource | EnumStockChangeSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeSourceFilter<$PrismaModel> | $Enums.StockChangeSource
+  }
+
+  export type StockMovementCountOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrder
+    changeType?: SortOrder
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+    source?: SortOrder
+    referenceId?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StockMovementAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+  }
+
+  export type StockMovementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrder
+    changeType?: SortOrder
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+    source?: SortOrder
+    referenceId?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StockMovementMinOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrder
+    changeType?: SortOrder
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+    source?: SortOrder
+    referenceId?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StockMovementSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    previousStock?: SortOrder
+    newStock?: SortOrder
+  }
+
+  export type EnumStockChangeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeType | EnumStockChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeTypeWithAggregatesFilter<$PrismaModel> | $Enums.StockChangeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStockChangeTypeFilter<$PrismaModel>
+    _max?: NestedEnumStockChangeTypeFilter<$PrismaModel>
+  }
+
+  export type EnumStockChangeSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeSource | EnumStockChangeSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeSourceWithAggregatesFilter<$PrismaModel> | $Enums.StockChangeSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStockChangeSourceFilter<$PrismaModel>
+    _max?: NestedEnumStockChangeSourceFilter<$PrismaModel>
   }
 
   export type UserInfoCreateNestedOneWithoutUserInput = {
@@ -45324,6 +47184,13 @@ export namespace Prisma {
     connect?: ProductAnalyticsEventWhereUniqueInput | ProductAnalyticsEventWhereUniqueInput[]
   }
 
+  export type StockMovementCreateNestedManyWithoutProductInput = {
+    create?: XOR<StockMovementCreateWithoutProductInput, StockMovementUncheckedCreateWithoutProductInput> | StockMovementCreateWithoutProductInput[] | StockMovementUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutProductInput | StockMovementCreateOrConnectWithoutProductInput[]
+    createMany?: StockMovementCreateManyProductInputEnvelope
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+  }
+
   export type CartItemUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<CartItemCreateWithoutProductInput, CartItemUncheckedCreateWithoutProductInput> | CartItemCreateWithoutProductInput[] | CartItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: CartItemCreateOrConnectWithoutProductInput | CartItemCreateOrConnectWithoutProductInput[]
@@ -45398,6 +47265,13 @@ export namespace Prisma {
     connectOrCreate?: ProductAnalyticsEventCreateOrConnectWithoutProductInput | ProductAnalyticsEventCreateOrConnectWithoutProductInput[]
     createMany?: ProductAnalyticsEventCreateManyProductInputEnvelope
     connect?: ProductAnalyticsEventWhereUniqueInput | ProductAnalyticsEventWhereUniqueInput[]
+  }
+
+  export type StockMovementUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<StockMovementCreateWithoutProductInput, StockMovementUncheckedCreateWithoutProductInput> | StockMovementCreateWithoutProductInput[] | StockMovementUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutProductInput | StockMovementCreateOrConnectWithoutProductInput[]
+    createMany?: StockMovementCreateManyProductInputEnvelope
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
   }
 
   export type ProductUpdatetagsInput = {
@@ -45609,6 +47483,20 @@ export namespace Prisma {
     deleteMany?: ProductAnalyticsEventScalarWhereInput | ProductAnalyticsEventScalarWhereInput[]
   }
 
+  export type StockMovementUpdateManyWithoutProductNestedInput = {
+    create?: XOR<StockMovementCreateWithoutProductInput, StockMovementUncheckedCreateWithoutProductInput> | StockMovementCreateWithoutProductInput[] | StockMovementUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutProductInput | StockMovementCreateOrConnectWithoutProductInput[]
+    upsert?: StockMovementUpsertWithWhereUniqueWithoutProductInput | StockMovementUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: StockMovementCreateManyProductInputEnvelope
+    set?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    disconnect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    delete?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    update?: StockMovementUpdateWithWhereUniqueWithoutProductInput | StockMovementUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: StockMovementUpdateManyWithWhereWithoutProductInput | StockMovementUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: StockMovementScalarWhereInput | StockMovementScalarWhereInput[]
+  }
+
   export type CartItemUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<CartItemCreateWithoutProductInput, CartItemUncheckedCreateWithoutProductInput> | CartItemCreateWithoutProductInput[] | CartItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: CartItemCreateOrConnectWithoutProductInput | CartItemCreateOrConnectWithoutProductInput[]
@@ -45757,6 +47645,20 @@ export namespace Prisma {
     update?: ProductAnalyticsEventUpdateWithWhereUniqueWithoutProductInput | ProductAnalyticsEventUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ProductAnalyticsEventUpdateManyWithWhereWithoutProductInput | ProductAnalyticsEventUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ProductAnalyticsEventScalarWhereInput | ProductAnalyticsEventScalarWhereInput[]
+  }
+
+  export type StockMovementUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<StockMovementCreateWithoutProductInput, StockMovementUncheckedCreateWithoutProductInput> | StockMovementCreateWithoutProductInput[] | StockMovementUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutProductInput | StockMovementCreateOrConnectWithoutProductInput[]
+    upsert?: StockMovementUpsertWithWhereUniqueWithoutProductInput | StockMovementUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: StockMovementCreateManyProductInputEnvelope
+    set?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    disconnect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    delete?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    update?: StockMovementUpdateWithWhereUniqueWithoutProductInput | StockMovementUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: StockMovementUpdateManyWithWhereWithoutProductInput | StockMovementUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: StockMovementScalarWhereInput | StockMovementScalarWhereInput[]
   }
 
   export type ProductCreateNestedOneWithoutDetailsInput = {
@@ -45962,6 +47864,13 @@ export namespace Prisma {
     connect?: OrderItemsWhereUniqueInput | OrderItemsWhereUniqueInput[]
   }
 
+  export type StockMovementCreateNestedManyWithoutVariantInput = {
+    create?: XOR<StockMovementCreateWithoutVariantInput, StockMovementUncheckedCreateWithoutVariantInput> | StockMovementCreateWithoutVariantInput[] | StockMovementUncheckedCreateWithoutVariantInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutVariantInput | StockMovementCreateOrConnectWithoutVariantInput[]
+    createMany?: StockMovementCreateManyVariantInputEnvelope
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+  }
+
   export type ProductVariantCombinationOptionUncheckedCreateNestedManyWithoutCombinationInput = {
     create?: XOR<ProductVariantCombinationOptionCreateWithoutCombinationInput, ProductVariantCombinationOptionUncheckedCreateWithoutCombinationInput> | ProductVariantCombinationOptionCreateWithoutCombinationInput[] | ProductVariantCombinationOptionUncheckedCreateWithoutCombinationInput[]
     connectOrCreate?: ProductVariantCombinationOptionCreateOrConnectWithoutCombinationInput | ProductVariantCombinationOptionCreateOrConnectWithoutCombinationInput[]
@@ -45981,6 +47890,13 @@ export namespace Prisma {
     connectOrCreate?: OrderItemsCreateOrConnectWithoutVariantInput | OrderItemsCreateOrConnectWithoutVariantInput[]
     createMany?: OrderItemsCreateManyVariantInputEnvelope
     connect?: OrderItemsWhereUniqueInput | OrderItemsWhereUniqueInput[]
+  }
+
+  export type StockMovementUncheckedCreateNestedManyWithoutVariantInput = {
+    create?: XOR<StockMovementCreateWithoutVariantInput, StockMovementUncheckedCreateWithoutVariantInput> | StockMovementCreateWithoutVariantInput[] | StockMovementUncheckedCreateWithoutVariantInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutVariantInput | StockMovementCreateOrConnectWithoutVariantInput[]
+    createMany?: StockMovementCreateManyVariantInputEnvelope
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
   }
 
   export type ProductUpdateOneRequiredWithoutVariantCombinationsNestedInput = {
@@ -46033,6 +47949,20 @@ export namespace Prisma {
     deleteMany?: OrderItemsScalarWhereInput | OrderItemsScalarWhereInput[]
   }
 
+  export type StockMovementUpdateManyWithoutVariantNestedInput = {
+    create?: XOR<StockMovementCreateWithoutVariantInput, StockMovementUncheckedCreateWithoutVariantInput> | StockMovementCreateWithoutVariantInput[] | StockMovementUncheckedCreateWithoutVariantInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutVariantInput | StockMovementCreateOrConnectWithoutVariantInput[]
+    upsert?: StockMovementUpsertWithWhereUniqueWithoutVariantInput | StockMovementUpsertWithWhereUniqueWithoutVariantInput[]
+    createMany?: StockMovementCreateManyVariantInputEnvelope
+    set?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    disconnect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    delete?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    update?: StockMovementUpdateWithWhereUniqueWithoutVariantInput | StockMovementUpdateWithWhereUniqueWithoutVariantInput[]
+    updateMany?: StockMovementUpdateManyWithWhereWithoutVariantInput | StockMovementUpdateManyWithWhereWithoutVariantInput[]
+    deleteMany?: StockMovementScalarWhereInput | StockMovementScalarWhereInput[]
+  }
+
   export type ProductVariantCombinationOptionUncheckedUpdateManyWithoutCombinationNestedInput = {
     create?: XOR<ProductVariantCombinationOptionCreateWithoutCombinationInput, ProductVariantCombinationOptionUncheckedCreateWithoutCombinationInput> | ProductVariantCombinationOptionCreateWithoutCombinationInput[] | ProductVariantCombinationOptionUncheckedCreateWithoutCombinationInput[]
     connectOrCreate?: ProductVariantCombinationOptionCreateOrConnectWithoutCombinationInput | ProductVariantCombinationOptionCreateOrConnectWithoutCombinationInput[]
@@ -46073,6 +48003,20 @@ export namespace Prisma {
     update?: OrderItemsUpdateWithWhereUniqueWithoutVariantInput | OrderItemsUpdateWithWhereUniqueWithoutVariantInput[]
     updateMany?: OrderItemsUpdateManyWithWhereWithoutVariantInput | OrderItemsUpdateManyWithWhereWithoutVariantInput[]
     deleteMany?: OrderItemsScalarWhereInput | OrderItemsScalarWhereInput[]
+  }
+
+  export type StockMovementUncheckedUpdateManyWithoutVariantNestedInput = {
+    create?: XOR<StockMovementCreateWithoutVariantInput, StockMovementUncheckedCreateWithoutVariantInput> | StockMovementCreateWithoutVariantInput[] | StockMovementUncheckedCreateWithoutVariantInput[]
+    connectOrCreate?: StockMovementCreateOrConnectWithoutVariantInput | StockMovementCreateOrConnectWithoutVariantInput[]
+    upsert?: StockMovementUpsertWithWhereUniqueWithoutVariantInput | StockMovementUpsertWithWhereUniqueWithoutVariantInput[]
+    createMany?: StockMovementCreateManyVariantInputEnvelope
+    set?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    disconnect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    delete?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    connect?: StockMovementWhereUniqueInput | StockMovementWhereUniqueInput[]
+    update?: StockMovementUpdateWithWhereUniqueWithoutVariantInput | StockMovementUpdateWithWhereUniqueWithoutVariantInput[]
+    updateMany?: StockMovementUpdateManyWithWhereWithoutVariantInput | StockMovementUpdateManyWithWhereWithoutVariantInput[]
+    deleteMany?: StockMovementScalarWhereInput | StockMovementScalarWhereInput[]
   }
 
   export type ProductVariantOptionCreateNestedOneWithoutCombinationsInput = {
@@ -46791,6 +48735,44 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutAnalyticsEventsInput, ProductUpdateWithoutAnalyticsEventsInput>, ProductUncheckedUpdateWithoutAnalyticsEventsInput>
   }
 
+  export type ProductCreateNestedOneWithoutStockMovementsInput = {
+    create?: XOR<ProductCreateWithoutStockMovementsInput, ProductUncheckedCreateWithoutStockMovementsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutStockMovementsInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type ProductVariantCombinationCreateNestedOneWithoutStockMovementsInput = {
+    create?: XOR<ProductVariantCombinationCreateWithoutStockMovementsInput, ProductVariantCombinationUncheckedCreateWithoutStockMovementsInput>
+    connectOrCreate?: ProductVariantCombinationCreateOrConnectWithoutStockMovementsInput
+    connect?: ProductVariantCombinationWhereUniqueInput
+  }
+
+  export type EnumStockChangeTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StockChangeType
+  }
+
+  export type EnumStockChangeSourceFieldUpdateOperationsInput = {
+    set?: $Enums.StockChangeSource
+  }
+
+  export type ProductUpdateOneRequiredWithoutStockMovementsNestedInput = {
+    create?: XOR<ProductCreateWithoutStockMovementsInput, ProductUncheckedCreateWithoutStockMovementsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutStockMovementsInput
+    upsert?: ProductUpsertWithoutStockMovementsInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutStockMovementsInput, ProductUpdateWithoutStockMovementsInput>, ProductUncheckedUpdateWithoutStockMovementsInput>
+  }
+
+  export type ProductVariantCombinationUpdateOneWithoutStockMovementsNestedInput = {
+    create?: XOR<ProductVariantCombinationCreateWithoutStockMovementsInput, ProductVariantCombinationUncheckedCreateWithoutStockMovementsInput>
+    connectOrCreate?: ProductVariantCombinationCreateOrConnectWithoutStockMovementsInput
+    upsert?: ProductVariantCombinationUpsertWithoutStockMovementsInput
+    disconnect?: ProductVariantCombinationWhereInput | boolean
+    delete?: ProductVariantCombinationWhereInput | boolean
+    connect?: ProductVariantCombinationWhereUniqueInput
+    update?: XOR<XOR<ProductVariantCombinationUpdateToOneWithWhereWithoutStockMovementsInput, ProductVariantCombinationUpdateWithoutStockMovementsInput>, ProductVariantCombinationUncheckedUpdateWithoutStockMovementsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -47223,6 +49205,40 @@ export namespace Prisma {
     _max?: NestedEnumAnalyticsEventTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumStockChangeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeType | EnumStockChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeTypeFilter<$PrismaModel> | $Enums.StockChangeType
+  }
+
+  export type NestedEnumStockChangeSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeSource | EnumStockChangeSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeSourceFilter<$PrismaModel> | $Enums.StockChangeSource
+  }
+
+  export type NestedEnumStockChangeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeType | EnumStockChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeType[] | ListEnumStockChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeTypeWithAggregatesFilter<$PrismaModel> | $Enums.StockChangeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStockChangeTypeFilter<$PrismaModel>
+    _max?: NestedEnumStockChangeTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStockChangeSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockChangeSource | EnumStockChangeSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockChangeSource[] | ListEnumStockChangeSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockChangeSourceWithAggregatesFilter<$PrismaModel> | $Enums.StockChangeSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStockChangeSourceFilter<$PrismaModel>
+    _max?: NestedEnumStockChangeSourceFilter<$PrismaModel>
+  }
+
   export type UserInfoCreateWithoutUserInput = {
     id?: string
     profilePhoto?: string | null
@@ -47375,6 +49391,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutUserInput = {
@@ -47419,6 +49436,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutUserInput = {
@@ -47934,6 +49952,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutCategoryInput = {
@@ -47978,6 +49997,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutCategoryInput = {
@@ -48129,6 +50149,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionCreateNestedManyWithoutCombinationInput
     cartItems?: CartItemCreateNestedManyWithoutVariantInput
     orderItems?: OrderItemsCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationUncheckedCreateWithoutProductInput = {
@@ -48143,6 +50164,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionUncheckedCreateNestedManyWithoutCombinationInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutVariantInput
     orderItems?: OrderItemsUncheckedCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationCreateOrConnectWithoutProductInput = {
@@ -48450,6 +50472,44 @@ export namespace Prisma {
 
   export type ProductAnalyticsEventCreateManyProductInputEnvelope = {
     data: ProductAnalyticsEventCreateManyProductInput | ProductAnalyticsEventCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StockMovementCreateWithoutProductInput = {
+    id?: string
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    variant?: ProductVariantCombinationCreateNestedOneWithoutStockMovementsInput
+  }
+
+  export type StockMovementUncheckedCreateWithoutProductInput = {
+    id?: string
+    variantId?: string | null
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StockMovementCreateOrConnectWithoutProductInput = {
+    where: StockMovementWhereUniqueInput
+    create: XOR<StockMovementCreateWithoutProductInput, StockMovementUncheckedCreateWithoutProductInput>
+  }
+
+  export type StockMovementCreateManyProductInputEnvelope = {
+    data: StockMovementCreateManyProductInput | StockMovementCreateManyProductInput[]
     skipDuplicates?: boolean
   }
 
@@ -48880,6 +50940,40 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ProductAnalyticsEvent"> | Date | string
   }
 
+  export type StockMovementUpsertWithWhereUniqueWithoutProductInput = {
+    where: StockMovementWhereUniqueInput
+    update: XOR<StockMovementUpdateWithoutProductInput, StockMovementUncheckedUpdateWithoutProductInput>
+    create: XOR<StockMovementCreateWithoutProductInput, StockMovementUncheckedCreateWithoutProductInput>
+  }
+
+  export type StockMovementUpdateWithWhereUniqueWithoutProductInput = {
+    where: StockMovementWhereUniqueInput
+    data: XOR<StockMovementUpdateWithoutProductInput, StockMovementUncheckedUpdateWithoutProductInput>
+  }
+
+  export type StockMovementUpdateManyWithWhereWithoutProductInput = {
+    where: StockMovementScalarWhereInput
+    data: XOR<StockMovementUpdateManyMutationInput, StockMovementUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type StockMovementScalarWhereInput = {
+    AND?: StockMovementScalarWhereInput | StockMovementScalarWhereInput[]
+    OR?: StockMovementScalarWhereInput[]
+    NOT?: StockMovementScalarWhereInput | StockMovementScalarWhereInput[]
+    id?: StringFilter<"StockMovement"> | string
+    productId?: StringFilter<"StockMovement"> | string
+    variantId?: StringNullableFilter<"StockMovement"> | string | null
+    changeType?: EnumStockChangeTypeFilter<"StockMovement"> | $Enums.StockChangeType
+    quantity?: IntFilter<"StockMovement"> | number
+    previousStock?: IntFilter<"StockMovement"> | number
+    newStock?: IntFilter<"StockMovement"> | number
+    source?: EnumStockChangeSourceFilter<"StockMovement"> | $Enums.StockChangeSource
+    referenceId?: StringNullableFilter<"StockMovement"> | string | null
+    note?: StringNullableFilter<"StockMovement"> | string | null
+    createdAt?: DateTimeFilter<"StockMovement"> | Date | string
+    updatedAt?: DateTimeFilter<"StockMovement"> | Date | string
+  }
+
   export type ProductCreateWithoutDetailsInput = {
     id?: string
     name: string
@@ -48922,6 +51016,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutDetailsInput = {
@@ -48966,6 +51061,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutDetailsInput = {
@@ -49026,6 +51122,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutDetailsInput = {
@@ -49070,6 +51167,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateWithoutBrandInput = {
@@ -49114,6 +51212,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutBrandInput = {
@@ -49158,6 +51257,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutBrandInput = {
@@ -49228,6 +51328,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutVariantsInput = {
@@ -49272,6 +51373,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutVariantsInput = {
@@ -49368,6 +51470,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutVariantsInput = {
@@ -49412,6 +51515,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductVariantOptionUpsertWithWhereUniqueWithoutVariantInput = {
@@ -49589,6 +51693,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutVariantCombinationsInput = {
@@ -49633,6 +51738,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutVariantCombinationsInput = {
@@ -49716,6 +51822,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StockMovementCreateWithoutVariantInput = {
+    id?: string
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutStockMovementsInput
+  }
+
+  export type StockMovementUncheckedCreateWithoutVariantInput = {
+    id?: string
+    productId: string
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StockMovementCreateOrConnectWithoutVariantInput = {
+    where: StockMovementWhereUniqueInput
+    create: XOR<StockMovementCreateWithoutVariantInput, StockMovementUncheckedCreateWithoutVariantInput>
+  }
+
+  export type StockMovementCreateManyVariantInputEnvelope = {
+    data: StockMovementCreateManyVariantInput | StockMovementCreateManyVariantInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProductUpsertWithoutVariantCombinationsInput = {
     update: XOR<ProductUpdateWithoutVariantCombinationsInput, ProductUncheckedUpdateWithoutVariantCombinationsInput>
     create: XOR<ProductCreateWithoutVariantCombinationsInput, ProductUncheckedCreateWithoutVariantCombinationsInput>
@@ -49769,6 +51913,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutVariantCombinationsInput = {
@@ -49813,6 +51958,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductVariantCombinationOptionUpsertWithWhereUniqueWithoutCombinationInput = {
@@ -49863,6 +52009,22 @@ export namespace Prisma {
     data: XOR<OrderItemsUpdateManyMutationInput, OrderItemsUncheckedUpdateManyWithoutVariantInput>
   }
 
+  export type StockMovementUpsertWithWhereUniqueWithoutVariantInput = {
+    where: StockMovementWhereUniqueInput
+    update: XOR<StockMovementUpdateWithoutVariantInput, StockMovementUncheckedUpdateWithoutVariantInput>
+    create: XOR<StockMovementCreateWithoutVariantInput, StockMovementUncheckedCreateWithoutVariantInput>
+  }
+
+  export type StockMovementUpdateWithWhereUniqueWithoutVariantInput = {
+    where: StockMovementWhereUniqueInput
+    data: XOR<StockMovementUpdateWithoutVariantInput, StockMovementUncheckedUpdateWithoutVariantInput>
+  }
+
+  export type StockMovementUpdateManyWithWhereWithoutVariantInput = {
+    where: StockMovementScalarWhereInput
+    data: XOR<StockMovementUpdateManyMutationInput, StockMovementUncheckedUpdateManyWithoutVariantInput>
+  }
+
   export type ProductVariantOptionCreateWithoutCombinationsInput = {
     id?: string
     value: string
@@ -49906,6 +52068,7 @@ export namespace Prisma {
     product: ProductCreateNestedOneWithoutVariantCombinationsInput
     cartItems?: CartItemCreateNestedManyWithoutVariantInput
     orderItems?: OrderItemsCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationUncheckedCreateWithoutOptionsInput = {
@@ -49920,6 +52083,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     cartItems?: CartItemUncheckedCreateNestedManyWithoutVariantInput
     orderItems?: OrderItemsUncheckedCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationCreateOrConnectWithoutOptionsInput = {
@@ -49987,6 +52151,7 @@ export namespace Prisma {
     product?: ProductUpdateOneRequiredWithoutVariantCombinationsNestedInput
     cartItems?: CartItemUpdateManyWithoutVariantNestedInput
     orderItems?: OrderItemsUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationUncheckedUpdateWithoutOptionsInput = {
@@ -50001,6 +52166,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cartItems?: CartItemUncheckedUpdateManyWithoutVariantNestedInput
     orderItems?: OrderItemsUncheckedUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductCreateWithoutImagesInput = {
@@ -50045,6 +52211,7 @@ export namespace Prisma {
     details?: ProductDetailCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutImagesInput = {
@@ -50089,6 +52256,7 @@ export namespace Prisma {
     details?: ProductDetailUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutImagesInput = {
@@ -50149,6 +52317,7 @@ export namespace Prisma {
     details?: ProductDetailUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutImagesInput = {
@@ -50193,6 +52362,7 @@ export namespace Prisma {
     details?: ProductDetailUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ShippingAddressCreateWithoutOrderInput = {
@@ -51010,6 +53180,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutOrderItemsInput = {
@@ -51054,6 +53225,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutOrderItemsInput = {
@@ -51073,6 +53245,7 @@ export namespace Prisma {
     product: ProductCreateNestedOneWithoutVariantCombinationsInput
     options?: ProductVariantCombinationOptionCreateNestedManyWithoutCombinationInput
     cartItems?: CartItemCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationUncheckedCreateWithoutOrderItemsInput = {
@@ -51087,6 +53260,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     options?: ProductVariantCombinationOptionUncheckedCreateNestedManyWithoutCombinationInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationCreateOrConnectWithoutOrderItemsInput = {
@@ -51206,6 +53380,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutOrderItemsInput = {
@@ -51250,6 +53425,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductVariantCombinationUpsertWithoutOrderItemsInput = {
@@ -51275,6 +53451,7 @@ export namespace Prisma {
     product?: ProductUpdateOneRequiredWithoutVariantCombinationsNestedInput
     options?: ProductVariantCombinationOptionUpdateManyWithoutCombinationNestedInput
     cartItems?: CartItemUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationUncheckedUpdateWithoutOrderItemsInput = {
@@ -51289,6 +53466,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     options?: ProductVariantCombinationOptionUncheckedUpdateManyWithoutCombinationNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type UserCreateWithoutCartInput = {
@@ -51488,6 +53666,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutCartItemsInput = {
@@ -51532,6 +53711,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutCartItemsInput = {
@@ -51551,6 +53731,7 @@ export namespace Prisma {
     product: ProductCreateNestedOneWithoutVariantCombinationsInput
     options?: ProductVariantCombinationOptionCreateNestedManyWithoutCombinationInput
     orderItems?: OrderItemsCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationUncheckedCreateWithoutCartItemsInput = {
@@ -51565,6 +53746,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     options?: ProductVariantCombinationOptionUncheckedCreateNestedManyWithoutCombinationInput
     orderItems?: OrderItemsUncheckedCreateNestedManyWithoutVariantInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCombinationCreateOrConnectWithoutCartItemsInput = {
@@ -51648,6 +53830,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCartItemsInput = {
@@ -51692,6 +53875,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductVariantCombinationUpsertWithoutCartItemsInput = {
@@ -51717,6 +53901,7 @@ export namespace Prisma {
     product?: ProductUpdateOneRequiredWithoutVariantCombinationsNestedInput
     options?: ProductVariantCombinationOptionUpdateManyWithoutCombinationNestedInput
     orderItems?: OrderItemsUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationUncheckedUpdateWithoutCartItemsInput = {
@@ -51731,6 +53916,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     options?: ProductVariantCombinationOptionUncheckedUpdateManyWithoutCombinationNestedInput
     orderItems?: OrderItemsUncheckedUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type OrderCreateWithoutReviewsInput = {
@@ -51828,6 +54014,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutReviewsInput = {
@@ -51872,6 +54059,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutReviewsInput = {
@@ -52036,6 +54224,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutReviewsInput = {
@@ -52080,6 +54269,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserUpsertWithoutReviewsInput = {
@@ -52175,6 +54365,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutWishlistsInput = {
@@ -52219,6 +54410,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutWishlistsInput = {
@@ -52324,6 +54516,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutWishlistsInput = {
@@ -52368,6 +54561,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserUpsertWithoutWishlistsInput = {
@@ -52572,6 +54766,7 @@ export namespace Prisma {
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutDiscountProductsInput = {
@@ -52616,6 +54811,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutDiscountProductsInput = {
@@ -52719,6 +54915,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutDiscountProductsInput = {
@@ -52763,6 +54960,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type CategoryCreateWithoutDiscountCategoriesInput = {
@@ -52951,6 +55149,7 @@ export namespace Prisma {
     details?: ProductDetailCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutLandingPageInput = {
@@ -52995,6 +55194,7 @@ export namespace Prisma {
     details?: ProductDetailUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutLandingPageInput = {
@@ -53055,6 +55255,7 @@ export namespace Prisma {
     details?: ProductDetailUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutLandingPageInput = {
@@ -53099,6 +55300,7 @@ export namespace Prisma {
     details?: ProductDetailUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type OrderCreateWithoutShipmentHistoriesInput = {
@@ -53255,6 +55457,7 @@ export namespace Prisma {
     details?: ProductDetailCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     landingPage?: LandingPageCreateNestedOneWithoutProductInput
+    stockMovements?: StockMovementCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutAnalyticsEventsInput = {
@@ -53299,6 +55502,7 @@ export namespace Prisma {
     details?: ProductDetailUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutAnalyticsEventsInput = {
@@ -53359,6 +55563,7 @@ export namespace Prisma {
     details?: ProductDetailUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutAnalyticsEventsInput = {
@@ -53403,6 +55608,279 @@ export namespace Prisma {
     details?: ProductDetailUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductCreateWithoutStockMovementsInput = {
+    id?: string
+    name: string
+    slug: string
+    shortDescription?: string | null
+    description?: string | null
+    tags?: ProductCreatetagsInput | string[]
+    isPublished?: boolean
+    isFeatured?: boolean
+    status?: $Enums.ProductStatus
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    buyingPrice?: number | null
+    sellingPrice?: number | null
+    regularPrice?: number | null
+    productSerial?: string | null
+    unitName?: string | null
+    warranty?: string | null
+    initialSoldCount?: number | null
+    stock?: number
+    videoUrl?: string | null
+    weight?: number | null
+    dimensions?: NullableJsonNullValueInput | InputJsonValue
+    condition?: string | null
+    applyDefaultDeliveryCharge?: boolean
+    deliveryCharge?: number | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cartItems?: CartItemCreateNestedManyWithoutProductInput
+    orderItems?: OrderItemsCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
+    variantCombinations?: ProductVariantCombinationCreateNestedManyWithoutProductInput
+    discountProducts?: DiscountProductCreateNestedManyWithoutProductInput
+    brand?: BrandCreateNestedOneWithoutProductsInput
+    category: CategoryCreateNestedOneWithoutProductInput
+    user: UserCreateNestedOneWithoutProductsInput
+    reviews?: ReviewCreateNestedManyWithoutProductInput
+    wishlists?: WishlistCreateNestedManyWithoutProductInput
+    details?: ProductDetailCreateNestedManyWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    landingPage?: LandingPageCreateNestedOneWithoutProductInput
+    analyticsEvents?: ProductAnalyticsEventCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutStockMovementsInput = {
+    id?: string
+    name: string
+    slug: string
+    shortDescription?: string | null
+    description?: string | null
+    productAddById: string
+    brandId?: string | null
+    categoryId: string
+    tags?: ProductCreatetagsInput | string[]
+    isPublished?: boolean
+    isFeatured?: boolean
+    status?: $Enums.ProductStatus
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    buyingPrice?: number | null
+    sellingPrice?: number | null
+    regularPrice?: number | null
+    productSerial?: string | null
+    unitName?: string | null
+    warranty?: string | null
+    initialSoldCount?: number | null
+    stock?: number
+    videoUrl?: string | null
+    weight?: number | null
+    dimensions?: NullableJsonNullValueInput | InputJsonValue
+    condition?: string | null
+    applyDefaultDeliveryCharge?: boolean
+    deliveryCharge?: number | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutProductInput
+    orderItems?: OrderItemsUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    variantCombinations?: ProductVariantCombinationUncheckedCreateNestedManyWithoutProductInput
+    discountProducts?: DiscountProductUncheckedCreateNestedManyWithoutProductInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutProductInput
+    details?: ProductDetailUncheckedCreateNestedManyWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    landingPage?: LandingPageUncheckedCreateNestedOneWithoutProductInput
+    analyticsEvents?: ProductAnalyticsEventUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutStockMovementsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutStockMovementsInput, ProductUncheckedCreateWithoutStockMovementsInput>
+  }
+
+  export type ProductVariantCombinationCreateWithoutStockMovementsInput = {
+    id?: string
+    sku: string
+    quantity?: number
+    imageId?: string | null
+    finalPrice?: number
+    status?: $Enums.ProductStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutVariantCombinationsInput
+    options?: ProductVariantCombinationOptionCreateNestedManyWithoutCombinationInput
+    cartItems?: CartItemCreateNestedManyWithoutVariantInput
+    orderItems?: OrderItemsCreateNestedManyWithoutVariantInput
+  }
+
+  export type ProductVariantCombinationUncheckedCreateWithoutStockMovementsInput = {
+    id?: string
+    productId: string
+    sku: string
+    quantity?: number
+    imageId?: string | null
+    finalPrice?: number
+    status?: $Enums.ProductStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    options?: ProductVariantCombinationOptionUncheckedCreateNestedManyWithoutCombinationInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutVariantInput
+    orderItems?: OrderItemsUncheckedCreateNestedManyWithoutVariantInput
+  }
+
+  export type ProductVariantCombinationCreateOrConnectWithoutStockMovementsInput = {
+    where: ProductVariantCombinationWhereUniqueInput
+    create: XOR<ProductVariantCombinationCreateWithoutStockMovementsInput, ProductVariantCombinationUncheckedCreateWithoutStockMovementsInput>
+  }
+
+  export type ProductUpsertWithoutStockMovementsInput = {
+    update: XOR<ProductUpdateWithoutStockMovementsInput, ProductUncheckedUpdateWithoutStockMovementsInput>
+    create: XOR<ProductCreateWithoutStockMovementsInput, ProductUncheckedCreateWithoutStockMovementsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutStockMovementsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutStockMovementsInput, ProductUncheckedUpdateWithoutStockMovementsInput>
+  }
+
+  export type ProductUpdateWithoutStockMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: ProductUpdatetagsInput | string[]
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    buyingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    sellingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    regularPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    productSerial?: NullableStringFieldUpdateOperationsInput | string | null
+    unitName?: NullableStringFieldUpdateOperationsInput | string | null
+    warranty?: NullableStringFieldUpdateOperationsInput | string | null
+    initialSoldCount?: NullableIntFieldUpdateOperationsInput | number | null
+    stock?: IntFieldUpdateOperationsInput | number
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableFloatFieldUpdateOperationsInput | number | null
+    dimensions?: NullableJsonNullValueInput | InputJsonValue
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    applyDefaultDeliveryCharge?: BoolFieldUpdateOperationsInput | boolean
+    deliveryCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cartItems?: CartItemUpdateManyWithoutProductNestedInput
+    orderItems?: OrderItemsUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    variantCombinations?: ProductVariantCombinationUpdateManyWithoutProductNestedInput
+    discountProducts?: DiscountProductUpdateManyWithoutProductNestedInput
+    brand?: BrandUpdateOneWithoutProductsNestedInput
+    category?: CategoryUpdateOneRequiredWithoutProductNestedInput
+    user?: UserUpdateOneRequiredWithoutProductsNestedInput
+    reviews?: ReviewUpdateManyWithoutProductNestedInput
+    wishlists?: WishlistUpdateManyWithoutProductNestedInput
+    details?: ProductDetailUpdateManyWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    landingPage?: LandingPageUpdateOneWithoutProductNestedInput
+    analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutStockMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    productAddById?: StringFieldUpdateOperationsInput | string
+    brandId?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: StringFieldUpdateOperationsInput | string
+    tags?: ProductUpdatetagsInput | string[]
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    buyingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    sellingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    regularPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    productSerial?: NullableStringFieldUpdateOperationsInput | string | null
+    unitName?: NullableStringFieldUpdateOperationsInput | string | null
+    warranty?: NullableStringFieldUpdateOperationsInput | string | null
+    initialSoldCount?: NullableIntFieldUpdateOperationsInput | number | null
+    stock?: IntFieldUpdateOperationsInput | number
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableFloatFieldUpdateOperationsInput | number | null
+    dimensions?: NullableJsonNullValueInput | InputJsonValue
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    applyDefaultDeliveryCharge?: BoolFieldUpdateOperationsInput | boolean
+    deliveryCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cartItems?: CartItemUncheckedUpdateManyWithoutProductNestedInput
+    orderItems?: OrderItemsUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    variantCombinations?: ProductVariantCombinationUncheckedUpdateManyWithoutProductNestedInput
+    discountProducts?: DiscountProductUncheckedUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutProductNestedInput
+    details?: ProductDetailUncheckedUpdateManyWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
+    analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductVariantCombinationUpsertWithoutStockMovementsInput = {
+    update: XOR<ProductVariantCombinationUpdateWithoutStockMovementsInput, ProductVariantCombinationUncheckedUpdateWithoutStockMovementsInput>
+    create: XOR<ProductVariantCombinationCreateWithoutStockMovementsInput, ProductVariantCombinationUncheckedCreateWithoutStockMovementsInput>
+    where?: ProductVariantCombinationWhereInput
+  }
+
+  export type ProductVariantCombinationUpdateToOneWithWhereWithoutStockMovementsInput = {
+    where?: ProductVariantCombinationWhereInput
+    data: XOR<ProductVariantCombinationUpdateWithoutStockMovementsInput, ProductVariantCombinationUncheckedUpdateWithoutStockMovementsInput>
+  }
+
+  export type ProductVariantCombinationUpdateWithoutStockMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    imageId?: NullableStringFieldUpdateOperationsInput | string | null
+    finalPrice?: FloatFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutVariantCombinationsNestedInput
+    options?: ProductVariantCombinationOptionUpdateManyWithoutCombinationNestedInput
+    cartItems?: CartItemUpdateManyWithoutVariantNestedInput
+    orderItems?: OrderItemsUpdateManyWithoutVariantNestedInput
+  }
+
+  export type ProductVariantCombinationUncheckedUpdateWithoutStockMovementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    imageId?: NullableStringFieldUpdateOperationsInput | string | null
+    finalPrice?: FloatFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: ProductVariantCombinationOptionUncheckedUpdateManyWithoutCombinationNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutVariantNestedInput
+    orderItems?: OrderItemsUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type OrderCreateManyUserInput = {
@@ -53600,6 +56078,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutUserInput = {
@@ -53644,6 +56123,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutUserInput = {
@@ -53872,6 +56352,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCategoryInput = {
@@ -53916,6 +56397,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
@@ -54038,6 +56520,20 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type StockMovementCreateManyProductInput = {
+    id?: string
+    variantId?: string | null
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CartItemUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
@@ -54133,6 +56629,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionUpdateManyWithoutCombinationNestedInput
     cartItems?: CartItemUpdateManyWithoutVariantNestedInput
     orderItems?: OrderItemsUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationUncheckedUpdateWithoutProductInput = {
@@ -54147,6 +56644,7 @@ export namespace Prisma {
     options?: ProductVariantCombinationOptionUncheckedUpdateManyWithoutCombinationNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutVariantNestedInput
     orderItems?: OrderItemsUncheckedUpdateManyWithoutVariantNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCombinationUncheckedUpdateManyWithoutProductInput = {
@@ -54307,6 +56805,48 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StockMovementUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    variant?: ProductVariantCombinationUpdateOneWithoutStockMovementsNestedInput
+  }
+
+  export type StockMovementUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockMovementUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProductCreateManyBrandInput = {
     id?: string
     name: string
@@ -54382,6 +56922,7 @@ export namespace Prisma {
     images?: ProductImageUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutBrandInput = {
@@ -54426,6 +56967,7 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     landingPage?: LandingPageUncheckedUpdateOneWithoutProductNestedInput
     analyticsEvents?: ProductAnalyticsEventUncheckedUpdateManyWithoutProductNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutBrandInput = {
@@ -54554,6 +57096,20 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type StockMovementCreateManyVariantInput = {
+    id?: string
+    productId: string
+    changeType: $Enums.StockChangeType
+    quantity: number
+    previousStock: number
+    newStock: number
+    source: $Enums.StockChangeSource
+    referenceId?: string | null
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ProductVariantCombinationOptionUpdateWithoutCombinationInput = {
     id?: StringFieldUpdateOperationsInput | string
     option?: ProductVariantOptionUpdateOneRequiredWithoutCombinationsNestedInput
@@ -54619,6 +57175,48 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockMovementUpdateWithoutVariantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutStockMovementsNestedInput
+  }
+
+  export type StockMovementUncheckedUpdateWithoutVariantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StockMovementUncheckedUpdateManyWithoutVariantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    changeType?: EnumStockChangeTypeFieldUpdateOperationsInput | $Enums.StockChangeType
+    quantity?: IntFieldUpdateOperationsInput | number
+    previousStock?: IntFieldUpdateOperationsInput | number
+    newStock?: IntFieldUpdateOperationsInput | number
+    source?: EnumStockChangeSourceFieldUpdateOperationsInput | $Enums.StockChangeSource
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

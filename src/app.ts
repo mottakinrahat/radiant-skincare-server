@@ -10,23 +10,18 @@ import cookieParser from "cookie-parser";
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    const allowedOrigins = [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "http://localhost:5000",
-    ];
-    // Allow all vercel.app deployments (production + preview)
-    const vercelPattern = /^https:\/\/techntrovefrontend.*\.vercel\.app$/;
+    const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:[0-9]+)?$/.test(origin || "");
+    const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
 
-    if (!origin || allowedOrigins.includes(origin) || vercelPattern.test(origin)) {
+    if (!origin || isLocalhost || vercelPattern.test(origin)) {
       callback(null, true);
     } else {
-      callback(new Error(`CORS blocked: ${origin}`));
+      callback(null, true);
     }
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie", "X-Requested-With", "Accept"],
 };
 
 const app = express();

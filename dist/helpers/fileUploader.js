@@ -49,6 +49,21 @@ const s3Client = new client_s3_1.S3Client({
         secretAccessKey: config_1.default.cloudflare.secretAccessKey || "",
     },
 });
+/**
+ * Builds the public serving URL for an R2 object key using the Cloudflare R2 Public Development / Custom URL.
+ * NEVER returns the S3 API endpoint.
+ */
+const getPublicUrl = (key) => {
+    const baseUrl = config_1.default.cloudflare.publicUrl ||
+        process.env.CLOUDFLARE_R2_PUBLIC_URL ||
+        "https://pub-35b4d3ebcc7e43f3b17d94c945dc95a2.r2.dev";
+    const cleanBase = baseUrl.replace(/\/$/, "");
+    const cleanKey = key.replace(/^\//, "");
+    return `${cleanBase}/${cleanKey}`;
+};
+/**
+ * Uploads a single file to Cloudflare R2 and returns its public URL and object key.
+ */
 const uploadToCloudflare = (filePath, options) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!fs_1.default.existsSync(filePath)) {
@@ -73,17 +88,8 @@ const uploadToCloudflare = (filePath, options) => __awaiter(void 0, void 0, void
         if (fs_1.default.existsSync(filePath)) {
             fs_1.default.unlinkSync(filePath);
         }
-        // Determine public URL
-        let publicUrl;
-        if (config_1.default.cloudflare.publicUrl) {
-            publicUrl = `${config_1.default.cloudflare.publicUrl.replace(/\/$/, "")}/${key}`;
-        }
-        else if (endpoint) {
-            publicUrl = `${endpoint.replace(/\/$/, "")}/${bucketName}/${key}`;
-        }
-        else {
-            publicUrl = `https://${bucketName}.r2.cloudflarestorage.com/${key}`;
-        }
+        // Generate public serving URL using CLOUDFLARE_R2_PUBLIC_URL
+        const publicUrl = getPublicUrl(key);
         return {
             url: publicUrl,
             key,
@@ -96,6 +102,19 @@ const uploadToCloudflare = (filePath, options) => __awaiter(void 0, void 0, void
         throw error;
     }
 });
+/**
+ * Uploads multiple files to Cloudflare R2 in parallel and returns array of public URLs and keys.
+ */
+const uploadMultipleToCloudflare = (files, options) => __awaiter(void 0, void 0, void 0, function* () {
+    const uploadPromises = files.map((f) => {
+        const filePath = typeof f === "string" ? f : f.path;
+        return uploadToCloudflare(filePath, options);
+    });
+    return Promise.all(uploadPromises);
+});
+/**
+ * Deletes an object from Cloudflare R2 using its key or full public/S3 URL.
+ */
 const deleteFromCloudflare = (keyOrUrl) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bucketName = config_1.default.cloudflare.bucketName || "skincare";
@@ -104,6 +123,7 @@ const deleteFromCloudflare = (keyOrUrl) => __awaiter(void 0, void 0, void 0, fun
         if (keyOrUrl.startsWith("http://") || keyOrUrl.startsWith("https://")) {
             const urlObj = new URL(keyOrUrl);
             let pathname = urlObj.pathname.replace(/^\//, "");
+            // Handle S3 endpoint URL format (endpoint/bucketName/key)
             if (pathname.startsWith(`${bucketName}/`)) {
                 pathname = pathname.replace(`${bucketName}/`, "");
             }
@@ -123,6 +143,8 @@ const deleteFromCloudflare = (keyOrUrl) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.fileUploader = {
     upload,
+    getPublicUrl,
     uploadToCloudflare,
+    uploadMultipleToCloudflare,
     deleteFromCloudflare,
 };

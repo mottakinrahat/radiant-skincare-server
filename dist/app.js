@@ -11,23 +11,18 @@ const notFound_1 = __importDefault(require("./app/middleWares/notFound"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const corsOptions = {
     origin: (origin, callback) => {
-        const allowedOrigins = [
-            "http://localhost:3000",
-            "http://localhost:3001",
-            "http://localhost:5000",
-        ];
-        // Allow all vercel.app deployments (production + preview)
-        const vercelPattern = /^https:\/\/techntrovefrontend.*\.vercel\.app$/;
-        if (!origin || allowedOrigins.includes(origin) || vercelPattern.test(origin)) {
+        const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:[0-9]+)?$/.test(origin || "");
+        const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
+        if (!origin || isLocalhost || vercelPattern.test(origin)) {
             callback(null, true);
         }
         else {
-            callback(new Error(`CORS blocked: ${origin}`));
+            callback(null, true);
         }
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "X-Requested-With", "Accept"],
 };
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)(corsOptions));

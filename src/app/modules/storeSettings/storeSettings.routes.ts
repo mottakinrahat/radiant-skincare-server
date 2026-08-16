@@ -7,19 +7,19 @@ import { StoreSettingsValidation } from "./storeSettings.validation";
 
 const router = express.Router();
 
-// GET /store-settings — public, fetched by frontend on load for branding
+// GET /store-settings ??? public, fetched by frontend on load for branding
 router.get("/", StoreSettingsController.getSettings);
 
-// PUT /store-settings — admin-only, singleton upsert
+// PUT / PATCH /store-settings ??? admin & manager, singleton upsert
 router.put(
   "/",
-  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER),
   validateRequest(StoreSettingsValidation.upsertSettings),
   StoreSettingsController.upsertSettings,
 );
 router.patch(
   "/",
-  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER),
   validateRequest(StoreSettingsValidation.upsertSettings),
   StoreSettingsController.upsertSettings,
 );

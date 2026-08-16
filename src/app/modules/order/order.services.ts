@@ -1,3 +1,4 @@
+import { InventoryServices } from "../inventory/inventory.services";
 import { OrderStatus, PaymentStatusEnum, PaymentMethod } from "../../../../prisma/generated/prisma";
 import prisma from "../../../shared/prisma";
 
@@ -36,7 +37,7 @@ const createOrder = async (
     }
 
     const product = await prisma.product.findUnique({
-      where: { id: item.productId },
+      where: { id: (item as any).actualProductId || item.productId },
       include: {
         variants: {
           include: {
@@ -260,14 +261,14 @@ const createOrder = async (
       const shippingAddress = await tx.shippingAddress.create({
         data: {
           userId: user.id,
-          houseStreet: payload.shippingAddress.houseStreet,
+          houseStreet: payload.shippingAddress.houseStreet || payload.shippingAddress.address || "N/A",
           village: payload.shippingAddress.village,
-          postOffice: payload.shippingAddress.postOffice,
-          upazilla: payload.shippingAddress.upazilla,
+          postOffice: payload.shippingAddress.postOffice || payload.shippingAddress.upazilla || payload.shippingAddress.upazila || payload.shippingAddress.district || "N/A",
+          upazilla: payload.shippingAddress.upazilla || payload.shippingAddress.upazila || payload.shippingAddress.district || "N/A",
           district: payload.shippingAddress.district,
           division: payload.shippingAddress.division,
           country: payload.shippingAddress.country || "Bangladesh",
-          phoneNumber: payload.shippingAddress.phoneNumber,
+          phoneNumber: payload.shippingAddress.phoneNumber || payload.shippingAddress.phone || user.contactNumber || (user as any).phone || "01000000000",
           altPhoneNumber: payload.shippingAddress.altPhoneNumber,
         },
       });
@@ -303,7 +304,7 @@ const createOrder = async (
 
     const orderItemsData = items.map((item) => ({
       orderId: newOrder.id,
-      productId: item.productId,
+      productId: (item as any).actualProductId || item.productId,
       variantId: (item as any).resolvedVariantId || null,
       quantity: Number(item.quantity),
       price: Number(item.price),
@@ -313,55 +314,21 @@ const createOrder = async (
       data: orderItemsData,
     });
 
-    // Deduct stock on order creation atomically inside transaction
+    // Validate stock sufficiency before placing order
     for (const item of items as any[]) {
       if (item.resolvedVariantId) {
-        // 1. Variant product with combination: decrement ONLY variant combination stock
         const currentVariant = await tx.productVariantCombination.findUnique({
           where: { id: item.resolvedVariantId },
-          select: { quantity: true, status: true },
+          select: { quantity: true },
         });
         if (!currentVariant || currentVariant.quantity < item.quantity) {
           throw new Error(
             `Insufficient stock for selected variant. Available: ${currentVariant?.quantity ?? 0}, Requested: ${item.quantity}`
           );
         }
-        const updated = await tx.productVariantCombination.update({
-          where: { id: item.resolvedVariantId },
-          data: { quantity: { decrement: item.quantity } },
-        });
-        // Auto-deactivate if stock reached 0
-        if (updated.quantity <= 0) {
-          await tx.productVariantCombination.update({
-            where: { id: item.resolvedVariantId },
-            data: { status: "INACTIVE", quantity: Math.max(0, updated.quantity) },
-          });
-        }
-      } else if (item.resolvedOptionId) {
-        // 2. Single variant option without combinations: decrement ONLY ProductVariantOption quantity
-        const currentOption = await tx.productVariantOption.findUnique({
-          where: { id: item.resolvedOptionId },
-          select: { quantity: true, status: true },
-        });
-        if (!currentOption || (currentOption.quantity ?? 0) < item.quantity) {
-          throw new Error(
-            `Insufficient stock for selected option. Available: ${currentOption?.quantity ?? 0}, Requested: ${item.quantity}`
-          );
-        }
-        const updated = await tx.productVariantOption.update({
-          where: { id: item.resolvedOptionId },
-          data: { quantity: { decrement: item.quantity } },
-        });
-        if (updated.quantity <= 0) {
-          await tx.productVariantOption.update({
-            where: { id: item.resolvedOptionId },
-            data: { status: "INACTIVE", quantity: Math.max(0, updated.quantity) },
-          });
-        }
       } else {
-        // 3. Simple product (no variants): decrement Product.stock ONLY
         const currentProduct = await tx.product.findUnique({
-          where: { id: item.productId },
+          where: { id: (item as any).actualProductId || item.productId },
           select: { stock: true },
         });
         if (!currentProduct || (currentProduct.stock ?? 0) < item.quantity) {
@@ -369,10 +336,6 @@ const createOrder = async (
             `Insufficient stock for product. Available: ${currentProduct?.stock ?? 0}, Requested: ${item.quantity}`
           );
         }
-        await tx.product.update({
-          where: { id: item.productId },
-          data: { stock: { decrement: item.quantity } },
-        });
       }
     }
 
@@ -428,6 +391,9 @@ const createOrder = async (
   }).catch((err) => {
     console.error("[OrderServices] CAPI tracking error (non-blocking):", err);
   });
+
+    // Centralized single stock deduction on order creation
+  await InventoryServices.deductStockForOrder(result.id, items, "ORDER_PLACED");
 
   return result;
 };
@@ -579,82 +545,22 @@ const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
     data: updateData,
   });
 
-  const isNowConfirmed = (
-    [
-      OrderStatus.CONFIRMED,
-      OrderStatus.PROGRESSING,
-      OrderStatus.SHIPPED,
-      OrderStatus.DELIVERED,
-    ] as any[]
-  ).includes(status);
+  // Auto Stock Management on status change (Idempotent single restore/deduct)
+  const isCancelledOrRefundedNow = status === OrderStatus.CANCELLED || status === OrderStatus.REFUNDED;
+  const wasCancelledOrRefundedPrev = prevStatus === OrderStatus.CANCELLED || prevStatus === OrderStatus.REFUNDED;
 
-  const wasConfirmed = (
-    [
-      OrderStatus.CONFIRMED,
-      OrderStatus.PROGRESSING,
-      OrderStatus.SHIPPED,
-      OrderStatus.DELIVERED,
-    ] as any[]
-  ).includes(prevStatus);
-
-  const isCancelledOrRefunded = (
-    [
-      OrderStatus.CANCELLED,
-      OrderStatus.REFUNDED,
-    ] as any[]
-  ).includes(status);
-
-  if (isNowConfirmed && !wasConfirmed) {
-    for (const item of existingOrder.items) {
-      const vId = (item as any).variantCombinationId || item.variantId;
-      if (vId) {
-        const updated = await prisma.productVariantCombination
-          .update({
-            where: { id: vId },
-            data: { quantity: { decrement: item.quantity } },
-          })
-          .catch(() => null);
-        if (updated && updated.quantity <= 0) {
-          await prisma.productVariantCombination
-            .update({
-              where: { id: vId },
-              data: { status: "INACTIVE", quantity: Math.max(0, updated.quantity) },
-            })
-            .catch(() => {});
-        }
-      } else if (item.productId) {
-        // Non-variant order confirmed: increment sold count
-        await prisma.product
-          .update({
-            where: { id: item.productId },
-            data: { initialSoldCount: { increment: item.quantity } },
-          })
-          .catch(() => {});
-      }
-    }
-  } else if (isCancelledOrRefunded && wasConfirmed) {
-    for (const item of existingOrder.items) {
-      const vId = (item as any).variantCombinationId || item.variantId;
-      if (vId) {
-        await prisma.productVariantCombination
-          .update({
-            where: { id: vId },
-            data: { quantity: { increment: item.quantity } },
-          })
-          .catch(() => {});
-      } else if (item.productId) {
-        // Non-variant order cancelled/refunded: restore stock
-        await prisma.product
-          .update({
-            where: { id: item.productId },
-            data: {
-              stock: { increment: item.quantity },
-              initialSoldCount: { decrement: Math.max(0, item.quantity) },
-            },
-          })
-          .catch(() => {});
-      }
-    }
+  if (isCancelledOrRefundedNow && !wasCancelledOrRefundedPrev) {
+    await InventoryServices.restoreStockForOrder(
+      existingOrder.id,
+      existingOrder.items,
+      status === OrderStatus.CANCELLED ? "ORDER_CANCELLED" : "ORDER_REFUNDED"
+    );
+  } else if (!isCancelledOrRefundedNow && wasCancelledOrRefundedPrev) {
+    await InventoryServices.deductStockForOrder(
+      existingOrder.id,
+      existingOrder.items,
+      "ORDER_RESHIPPED"
+    );
   }
 
   return updatedOrder;
@@ -705,7 +611,56 @@ const clearOrderCourierInfo = async (orderId: string) => {
   });
 };
 
+
+const deleteOrder = async (orderId: string) => {
+  const order = await prisma.order.findFirst({
+    where: {
+      OR: [
+        { id: orderId },
+        { orderNumber: isNaN(Number(orderId)) ? -1 : Number(orderId) }
+      ]
+    },
+    include: { items: true },
+  });
+
+  if (!order) {
+    return { id: orderId, deleted: true, message: "Order not found or already deleted" };
+  }
+
+  const realId = order.id;
+  const confirmedStatuses = ["CONFIRMED", "PROGRESSING", "SHIPPED", "DELIVERED"];
+
+  if (confirmedStatuses.includes(order.status) && Array.isArray(order.items)) {
+    for (const item of order.items) {
+      try {
+        await prisma.product.update({
+          where: { id: item.productId },
+          data: { stock: { increment: item.quantity } },
+        });
+        await (prisma as any).stockMovement?.create({
+          data: {
+            productId: item.productId,
+            quantity: item.quantity,
+            type: "IN",
+            reason: `Order Deleted: #${order.orderNumber}`,
+          },
+        });
+      } catch (e: any) {
+        console.warn("Stock restoration note on delete:", e.message);
+      }
+    }
+  }
+
+  try { await (prisma as any).orderItems?.deleteMany({ where: { orderId: realId } }); } catch (e) {}
+  try { await (prisma as any).courierShipmentHistory?.deleteMany({ where: { orderId: realId } }); } catch (e) {}
+  try { await (prisma as any).payment?.deleteMany({ where: { orderId: realId } }); } catch (e) {}
+  await prisma.order.delete({ where: { id: realId } });
+
+  return { id: realId, orderNumber: order.orderNumber, deleted: true };
+};
+
 export const OrderServices = {
+  deleteOrder,
   createOrder,
   getOrdersForUser,
   getOrderById,

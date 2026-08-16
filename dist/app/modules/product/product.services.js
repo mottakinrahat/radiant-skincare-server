@@ -100,8 +100,19 @@ const createProductIntoDB = (req, user) => __awaiter(void 0, void 0, void 0, fun
         if (!payload || !payload.name) {
             throw new apiError_1.default(http_status_1.default.BAD_REQUEST, "Product name is required.");
         }
+        const trimmedName = payload.name.trim();
+        // Check for duplicate product name (case-insensitive)
+        const existingProduct = yield prisma_2.default.product.findFirst({
+            where: {
+                name: { equals: trimmedName, mode: "insensitive" },
+            },
+            select: { id: true, name: true },
+        });
+        if (existingProduct) {
+            throw new apiError_1.default(http_status_1.default.CONFLICT, `A product with name "${trimmedName}" already exists.`);
+        }
         // Auto-resolve unique slug to prevent unique constraint collisions
-        payload.slug = yield generateUniqueSlug(payload.slug || payload.name);
+        payload.slug = yield generateUniqueSlug(payload.slug || trimmedName);
         // Always auto-generate productSerial safely on backend (sequential: 01, 02, 03...)
         payload.productSerial = yield (0, exports.generateNextProductSerial)();
         if (payload.sellingPrice !== undefined && payload.sellingPrice !== null) {
@@ -123,9 +134,29 @@ const createProductIntoDB = (req, user) => __awaiter(void 0, void 0, void 0, fun
         if (!existingUser) {
             throw new apiError_1.default(http_status_1.default.NOT_FOUND, "User not found");
         }
-        let uploadToCloudflare;
-        if (file === null || file === void 0 ? void 0 : file.path) {
-            uploadToCloudflare = yield fileUploader_1.fileUploader.uploadToCloudflare(file.path);
+        // Collect all uploaded files (supports single req.file or multiple req.files)
+        const uploadedFiles = [];
+        if (req.file) {
+            uploadedFiles.push(req.file);
+        }
+        if (req.files) {
+            if (Array.isArray(req.files)) {
+                uploadedFiles.push(...req.files);
+            }
+            else if (typeof req.files === "object") {
+                Object.values(req.files).forEach((f) => {
+                    if (Array.isArray(f)) {
+                        uploadedFiles.push(...f);
+                    }
+                    else if (f === null || f === void 0 ? void 0 : f.path) {
+                        uploadedFiles.push(f);
+                    }
+                });
+            }
+        }
+        let uploadedR2Images = [];
+        if (uploadedFiles.length > 0) {
+            uploadedR2Images = yield fileUploader_1.fileUploader.uploadMultipleToCloudflare(uploadedFiles);
         }
         if (!payload.brandId || payload.brandId === "" || payload.brandId === "null") {
             delete payload.brandId;
@@ -187,24 +218,30 @@ const createProductIntoDB = (req, user) => __awaiter(void 0, void 0, void 0, fun
             });
             // 2. Build image records with guaranteed productId
             const imageRecords = [];
-            if (uploadToCloudflare === null || uploadToCloudflare === void 0 ? void 0 : uploadToCloudflare.url) {
+            // Add all Cloudflare R2 uploaded files
+            uploadedR2Images.forEach((img, idx) => {
                 imageRecords.push({
-                    url: uploadToCloudflare.url,
+                    url: img.url,
                     productId: product.id,
-                    isPrimary: true,
-                    sortOrder: 0,
+                    isPrimary: idx === 0,
+                    sortOrder: idx,
+                    altText: product.name,
                 });
-            }
+            });
             const isValidUrl = (u) => typeof u === "string" && u.trim().length > 0 && u.length < 2000 && !u.startsWith("blob:");
+            // Also include any raw image URLs passed in payload
             if (Array.isArray(images)) {
                 images.forEach((img, idx) => {
                     const url = typeof img === "string" ? img : img === null || img === void 0 ? void 0 : img.url;
-                    if (isValidUrl(url) && url !== (uploadToCloudflare === null || uploadToCloudflare === void 0 ? void 0 : uploadToCloudflare.url)) {
+                    if (isValidUrl(url) && !imageRecords.some((r) => r.url === url)) {
                         imageRecords.push({
                             url,
                             productId: product.id,
-                            isPrimary: typeof img === "object" ? !!img.isPrimary : idx === 0 && !(uploadToCloudflare === null || uploadToCloudflare === void 0 ? void 0 : uploadToCloudflare.url),
-                            sortOrder: idx,
+                            isPrimary: typeof img === "object"
+                                ? !!img.isPrimary
+                                : imageRecords.length === 0 && idx === 0,
+                            sortOrder: imageRecords.length + idx,
+                            altText: typeof img === "object" ? img.altText : product.name,
                         });
                     }
                 });
@@ -482,6 +519,18 @@ const updateProductIntoDB = (identifier, payload) => __awaiter(void 0, void 0, v
             productData.stock = Math.max(0, Number(payload.stock));
         }
     }
+    if (productData.name) {
+        const trimmedName = productData.name.trim();
+        const duplicate = yield prisma_2.default.product.findFirst({
+            where: {
+                name: { equals: trimmedName, mode: "insensitive" },
+                NOT: { id: existing.id },
+            },
+        });
+        if (duplicate) {
+            throw new apiError_1.default(http_status_1.default.CONFLICT, `A product with name "${trimmedName}" already exists.`);
+        }
+    }
     if (productData.slug || productData.name) {
         productData.slug = yield generateUniqueSlug(productData.slug || productData.name, existing.id);
     }
@@ -549,25 +598,61 @@ const createProductImageIntoDB = (productId, req) => __awaiter(void 0, void 0, v
     if (!product) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, "Product not found");
     }
-    const file = req === null || req === void 0 ? void 0 : req.file;
-    let imageUrl = (_a = req.body) === null || _a === void 0 ? void 0 : _a.url;
-    if (file === null || file === void 0 ? void 0 : file.path) {
-        const uploaded = yield fileUploader_1.fileUploader.uploadToCloudflare(file.path);
-        imageUrl = uploaded === null || uploaded === void 0 ? void 0 : uploaded.url;
+    // Collect all uploaded files (single or multiple)
+    const uploadedFiles = [];
+    if (req.file)
+        uploadedFiles.push(req.file);
+    if (req.files) {
+        if (Array.isArray(req.files))
+            uploadedFiles.push(...req.files);
+        else if (typeof req.files === "object") {
+            Object.values(req.files).forEach((f) => {
+                if (Array.isArray(f))
+                    uploadedFiles.push(...f);
+                else if (f === null || f === void 0 ? void 0 : f.path)
+                    uploadedFiles.push(f);
+            });
+        }
     }
-    if (!imageUrl) {
-        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, "Image URL or file is required");
+    let uploadedR2Images = [];
+    if (uploadedFiles.length > 0) {
+        uploadedR2Images = yield fileUploader_1.fileUploader.uploadMultipleToCloudflare(uploadedFiles);
     }
     const { isPrimary, sortOrder, altText } = req.body;
-    return prisma_2.default.productImage.create({
-        data: {
-            url: imageUrl,
+    const isPrimaryBool = isPrimary === true || isPrimary === "true";
+    // If newly uploaded image is primary, unmark previous primaries
+    if (isPrimaryBool) {
+        yield prisma_2.default.productImage.updateMany({
+            where: { productId },
+            data: { isPrimary: false },
+        });
+    }
+    if (uploadedR2Images.length > 0) {
+        const records = uploadedR2Images.map((img, idx) => ({
+            url: img.url,
             productId,
-            isPrimary: isPrimary === true || isPrimary === "true",
-            sortOrder: sortOrder ? Number(sortOrder) : 0,
-            altText,
-        },
-    });
+            isPrimary: isPrimaryBool && idx === 0,
+            sortOrder: sortOrder ? Number(sortOrder) + idx : idx,
+            altText: altText || product.name,
+        }));
+        yield prisma_2.default.productImage.createMany({ data: records });
+        return prisma_2.default.productImage.findMany({
+            where: { productId },
+            orderBy: { sortOrder: "asc" },
+        });
+    }
+    if ((_a = req.body) === null || _a === void 0 ? void 0 : _a.url) {
+        return prisma_2.default.productImage.create({
+            data: {
+                url: req.body.url,
+                productId,
+                isPrimary: isPrimaryBool,
+                sortOrder: sortOrder ? Number(sortOrder) : 0,
+                altText: altText || product.name,
+            },
+        });
+    }
+    throw new apiError_1.default(http_status_1.default.BAD_REQUEST, "Image file(s) or URL is required");
 });
 const deleteProductImageIntoDB = (imageId) => __awaiter(void 0, void 0, void 0, function* () {
     const image = yield prisma_2.default.productImage.findUnique({

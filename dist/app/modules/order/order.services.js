@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderServices = void 0;
+const inventory_services_1 = require("../inventory/inventory.services");
 const prisma_1 = require("../../../../prisma/generated/prisma");
 const prisma_2 = __importDefault(require("../../../shared/prisma"));
 const geo_utils_1 = require("../geo/geo.utils");
@@ -37,7 +38,7 @@ const createOrder = (email, payload, metaInfo) => __awaiter(void 0, void 0, void
             throw new Error("Item quantity must be a positive number");
         }
         const product = yield prisma_2.default.product.findUnique({
-            where: { id: item.productId },
+            where: { id: item.actualProductId || item.productId },
             include: {
                 variants: {
                     include: {
@@ -213,7 +214,7 @@ const createOrder = (email, payload, metaInfo) => __awaiter(void 0, void 0, void
         "";
     let shippingAddressId;
     const result = yield prisma_2.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c;
         // determine payment method and initial payment status
         const pmRaw = (payload.paymentMethod || "").toString().toUpperCase();
         const paymentMethodValue = pmRaw === "ONLINE" ? prisma_1.PaymentMethod.ONLINE : prisma_1.PaymentMethod.COD;
@@ -225,14 +226,14 @@ const createOrder = (email, payload, metaInfo) => __awaiter(void 0, void 0, void
             const shippingAddress = yield tx.shippingAddress.create({
                 data: {
                     userId: user.id,
-                    houseStreet: payload.shippingAddress.houseStreet,
+                    houseStreet: payload.shippingAddress.houseStreet || payload.shippingAddress.address || "N/A",
                     village: payload.shippingAddress.village,
-                    postOffice: payload.shippingAddress.postOffice,
-                    upazilla: payload.shippingAddress.upazilla,
+                    postOffice: payload.shippingAddress.postOffice || payload.shippingAddress.upazilla || payload.shippingAddress.upazila || payload.shippingAddress.district || "N/A",
+                    upazilla: payload.shippingAddress.upazilla || payload.shippingAddress.upazila || payload.shippingAddress.district || "N/A",
                     district: payload.shippingAddress.district,
                     division: payload.shippingAddress.division,
                     country: payload.shippingAddress.country || "Bangladesh",
-                    phoneNumber: payload.shippingAddress.phoneNumber,
+                    phoneNumber: payload.shippingAddress.phoneNumber || payload.shippingAddress.phone || user.contactNumber || user.phone || "01000000000",
                     altPhoneNumber: payload.shippingAddress.altPhoneNumber,
                 },
             });
@@ -264,7 +265,7 @@ const createOrder = (email, payload, metaInfo) => __awaiter(void 0, void 0, void
         });
         const orderItemsData = items.map((item) => ({
             orderId: newOrder.id,
-            productId: item.productId,
+            productId: item.actualProductId || item.productId,
             variantId: item.resolvedVariantId || null,
             quantity: Number(item.quantity),
             price: Number(item.price),
@@ -272,62 +273,25 @@ const createOrder = (email, payload, metaInfo) => __awaiter(void 0, void 0, void
         yield tx.orderItems.createMany({
             data: orderItemsData,
         });
-        // Deduct stock on order creation atomically inside transaction
+        // Validate stock sufficiency before placing order
         for (const item of items) {
             if (item.resolvedVariantId) {
-                // 1. Variant product with combination: decrement ONLY variant combination stock
                 const currentVariant = yield tx.productVariantCombination.findUnique({
                     where: { id: item.resolvedVariantId },
-                    select: { quantity: true, status: true },
+                    select: { quantity: true },
                 });
                 if (!currentVariant || currentVariant.quantity < item.quantity) {
                     throw new Error(`Insufficient stock for selected variant. Available: ${(_a = currentVariant === null || currentVariant === void 0 ? void 0 : currentVariant.quantity) !== null && _a !== void 0 ? _a : 0}, Requested: ${item.quantity}`);
                 }
-                const updated = yield tx.productVariantCombination.update({
-                    where: { id: item.resolvedVariantId },
-                    data: { quantity: { decrement: item.quantity } },
-                });
-                // Auto-deactivate if stock reached 0
-                if (updated.quantity <= 0) {
-                    yield tx.productVariantCombination.update({
-                        where: { id: item.resolvedVariantId },
-                        data: { status: "INACTIVE", quantity: Math.max(0, updated.quantity) },
-                    });
-                }
-            }
-            else if (item.resolvedOptionId) {
-                // 2. Single variant option without combinations: decrement ONLY ProductVariantOption quantity
-                const currentOption = yield tx.productVariantOption.findUnique({
-                    where: { id: item.resolvedOptionId },
-                    select: { quantity: true, status: true },
-                });
-                if (!currentOption || ((_b = currentOption.quantity) !== null && _b !== void 0 ? _b : 0) < item.quantity) {
-                    throw new Error(`Insufficient stock for selected option. Available: ${(_c = currentOption === null || currentOption === void 0 ? void 0 : currentOption.quantity) !== null && _c !== void 0 ? _c : 0}, Requested: ${item.quantity}`);
-                }
-                const updated = yield tx.productVariantOption.update({
-                    where: { id: item.resolvedOptionId },
-                    data: { quantity: { decrement: item.quantity } },
-                });
-                if (updated.quantity <= 0) {
-                    yield tx.productVariantOption.update({
-                        where: { id: item.resolvedOptionId },
-                        data: { status: "INACTIVE", quantity: Math.max(0, updated.quantity) },
-                    });
-                }
             }
             else {
-                // 3. Simple product (no variants): decrement Product.stock ONLY
                 const currentProduct = yield tx.product.findUnique({
-                    where: { id: item.productId },
+                    where: { id: item.actualProductId || item.productId },
                     select: { stock: true },
                 });
-                if (!currentProduct || ((_d = currentProduct.stock) !== null && _d !== void 0 ? _d : 0) < item.quantity) {
-                    throw new Error(`Insufficient stock for product. Available: ${(_e = currentProduct === null || currentProduct === void 0 ? void 0 : currentProduct.stock) !== null && _e !== void 0 ? _e : 0}, Requested: ${item.quantity}`);
+                if (!currentProduct || ((_b = currentProduct.stock) !== null && _b !== void 0 ? _b : 0) < item.quantity) {
+                    throw new Error(`Insufficient stock for product. Available: ${(_c = currentProduct === null || currentProduct === void 0 ? void 0 : currentProduct.stock) !== null && _c !== void 0 ? _c : 0}, Requested: ${item.quantity}`);
                 }
-                yield tx.product.update({
-                    where: { id: item.productId },
-                    data: { stock: { decrement: item.quantity } },
-                });
             }
         }
         if (payload.clearCart) {
@@ -376,6 +340,8 @@ const createOrder = (email, payload, metaInfo) => __awaiter(void 0, void 0, void
     }).catch((err) => {
         console.error("[OrderServices] CAPI tracking error (non-blocking):", err);
     });
+    // Centralized single stock deduction on order creation
+    yield inventory_services_1.InventoryServices.deductStockForOrder(result.id, items, "ORDER_PLACED");
     return result;
 });
 const orderFullInclude = {
@@ -503,76 +469,14 @@ const updateOrderStatus = (orderId, status) => __awaiter(void 0, void 0, void 0,
         where: { id: orderId },
         data: updateData,
     });
-    const isNowConfirmed = [
-        prisma_1.OrderStatus.CONFIRMED,
-        prisma_1.OrderStatus.PROGRESSING,
-        prisma_1.OrderStatus.SHIPPED,
-        prisma_1.OrderStatus.DELIVERED,
-    ].includes(status);
-    const wasConfirmed = [
-        prisma_1.OrderStatus.CONFIRMED,
-        prisma_1.OrderStatus.PROGRESSING,
-        prisma_1.OrderStatus.SHIPPED,
-        prisma_1.OrderStatus.DELIVERED,
-    ].includes(prevStatus);
-    const isCancelledOrRefunded = [
-        prisma_1.OrderStatus.CANCELLED,
-        prisma_1.OrderStatus.REFUNDED,
-    ].includes(status);
-    if (isNowConfirmed && !wasConfirmed) {
-        for (const item of existingOrder.items) {
-            const vId = item.variantCombinationId || item.variantId;
-            if (vId) {
-                const updated = yield prisma_2.default.productVariantCombination
-                    .update({
-                    where: { id: vId },
-                    data: { quantity: { decrement: item.quantity } },
-                })
-                    .catch(() => null);
-                if (updated && updated.quantity <= 0) {
-                    yield prisma_2.default.productVariantCombination
-                        .update({
-                        where: { id: vId },
-                        data: { status: "INACTIVE", quantity: Math.max(0, updated.quantity) },
-                    })
-                        .catch(() => { });
-                }
-            }
-            else if (item.productId) {
-                // Non-variant order confirmed: increment sold count
-                yield prisma_2.default.product
-                    .update({
-                    where: { id: item.productId },
-                    data: { initialSoldCount: { increment: item.quantity } },
-                })
-                    .catch(() => { });
-            }
-        }
+    // Auto Stock Management on status change (Idempotent single restore/deduct)
+    const isCancelledOrRefundedNow = status === prisma_1.OrderStatus.CANCELLED || status === prisma_1.OrderStatus.REFUNDED;
+    const wasCancelledOrRefundedPrev = prevStatus === prisma_1.OrderStatus.CANCELLED || prevStatus === prisma_1.OrderStatus.REFUNDED;
+    if (isCancelledOrRefundedNow && !wasCancelledOrRefundedPrev) {
+        yield inventory_services_1.InventoryServices.restoreStockForOrder(existingOrder.id, existingOrder.items, status === prisma_1.OrderStatus.CANCELLED ? "ORDER_CANCELLED" : "ORDER_REFUNDED");
     }
-    else if (isCancelledOrRefunded && wasConfirmed) {
-        for (const item of existingOrder.items) {
-            const vId = item.variantCombinationId || item.variantId;
-            if (vId) {
-                yield prisma_2.default.productVariantCombination
-                    .update({
-                    where: { id: vId },
-                    data: { quantity: { increment: item.quantity } },
-                })
-                    .catch(() => { });
-            }
-            else if (item.productId) {
-                // Non-variant order cancelled/refunded: restore stock
-                yield prisma_2.default.product
-                    .update({
-                    where: { id: item.productId },
-                    data: {
-                        stock: { increment: item.quantity },
-                        initialSoldCount: { decrement: Math.max(0, item.quantity) },
-                    },
-                })
-                    .catch(() => { });
-            }
-        }
+    else if (!isCancelledOrRefundedNow && wasCancelledOrRefundedPrev) {
+        yield inventory_services_1.InventoryServices.deductStockForOrder(existingOrder.id, existingOrder.items, "ORDER_RESHIPPED");
     }
     return updatedOrder;
 });
@@ -608,7 +512,60 @@ const clearOrderCourierInfo = (orderId) => __awaiter(void 0, void 0, void 0, fun
         },
     });
 });
+const deleteOrder = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    const order = yield prisma_2.default.order.findFirst({
+        where: {
+            OR: [
+                { id: orderId },
+                { orderNumber: isNaN(Number(orderId)) ? -1 : Number(orderId) }
+            ]
+        },
+        include: { items: true },
+    });
+    if (!order) {
+        return { id: orderId, deleted: true, message: "Order not found or already deleted" };
+    }
+    const realId = order.id;
+    const confirmedStatuses = ["CONFIRMED", "PROGRESSING", "SHIPPED", "DELIVERED"];
+    if (confirmedStatuses.includes(order.status) && Array.isArray(order.items)) {
+        for (const item of order.items) {
+            try {
+                yield prisma_2.default.product.update({
+                    where: { id: item.productId },
+                    data: { stock: { increment: item.quantity } },
+                });
+                yield ((_a = prisma_2.default.stockMovement) === null || _a === void 0 ? void 0 : _a.create({
+                    data: {
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        type: "IN",
+                        reason: `Order Deleted: #${order.orderNumber}`,
+                    },
+                }));
+            }
+            catch (e) {
+                console.warn("Stock restoration note on delete:", e.message);
+            }
+        }
+    }
+    try {
+        yield ((_b = prisma_2.default.orderItems) === null || _b === void 0 ? void 0 : _b.deleteMany({ where: { orderId: realId } }));
+    }
+    catch (e) { }
+    try {
+        yield ((_c = prisma_2.default.courierShipmentHistory) === null || _c === void 0 ? void 0 : _c.deleteMany({ where: { orderId: realId } }));
+    }
+    catch (e) { }
+    try {
+        yield ((_d = prisma_2.default.payment) === null || _d === void 0 ? void 0 : _d.deleteMany({ where: { orderId: realId } }));
+    }
+    catch (e) { }
+    yield prisma_2.default.order.delete({ where: { id: realId } });
+    return { id: realId, orderNumber: order.orderNumber, deleted: true };
+});
 exports.OrderServices = {
+    deleteOrder,
     createOrder,
     getOrdersForUser,
     getOrderById,

@@ -22,9 +22,42 @@ const getSettingsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
         create: { id: "singleton" },
     });
 });
+const ALLOWED_FIELDS = new Set([
+    "storeName",
+    "logoUrl",
+    "faviconUrl",
+    "primaryColor",
+    "secondaryColor",
+    "accentColor",
+    "supportEmail",
+    "supportPhone",
+    "address",
+    "currency",
+    "currencySymbol",
+    "socialLinks",
+    "metaPixelId",
+    "metaAccessToken",
+    "metaTestEventCode",
+    "tiktokPixelId",
+    "tiktokAccessToken",
+    "tiktokTestEventCode",
+    "googlePixelId",
+    "steadfastApiKey",
+    "steadfastSecretKey",
+    "steadfastBaseUrl",
+    "redxAccessToken",
+    "redxBaseUrl",
+    "pathaoClientId",
+    "pathaoClientSecret",
+    "pathaoUsername",
+    "pathaoPassword",
+    "fraudBdApiKey",
+]);
 const upsertSettingsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const data = {};
     for (const [key, value] of Object.entries(payload)) {
+        if (!ALLOWED_FIELDS.has(key))
+            continue;
         if (value !== undefined) {
             if (key === "socialLinks" && value === null) {
                 data[key] = prisma_1.Prisma.JsonNull;

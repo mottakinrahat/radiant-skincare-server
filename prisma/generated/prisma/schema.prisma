@@ -1,7 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   output        = "./generated/prisma"
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -127,6 +127,8 @@ model Product {
   details                    ProductDetail[]
   images                     ProductImage[]
   landingPage                LandingPage?
+  analyticsEvents            ProductAnalyticsEvent[]
+  stockMovements             StockMovement[]
 
   @@map("products")
 }
@@ -194,19 +196,20 @@ model ProductVariantOption {
 }
 
 model ProductVariantCombination {
-  id         String                            @id @default(uuid())
-  productId  String
-  sku        String                            @unique
-  quantity   Int                               @default(0)
-  imageId    String?
-  finalPrice Float                             @default(0)
-  status     ProductStatus                     @default(ACTIVE)
-  createdAt  DateTime                          @default(now())
-  updatedAt  DateTime                          @updatedAt
-  product    Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
-  options    ProductVariantCombinationOption[]
-  cartItems  CartItem[]
-  orderItems OrderItems[]
+  id             String                            @id @default(uuid())
+  productId      String
+  sku            String                            @unique
+  quantity       Int                               @default(0)
+  imageId        String?
+  finalPrice     Float                             @default(0)
+  status         ProductStatus                     @default(ACTIVE)
+  createdAt      DateTime                          @default(now())
+  updatedAt      DateTime                          @updatedAt
+  product        Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  options        ProductVariantCombinationOption[]
+  cartItems      CartItem[]
+  orderItems     OrderItems[]
+  stockMovements StockMovement[]
 
   @@index([productId])
   @@map("product_variant_combinations")
@@ -442,10 +445,13 @@ model StoreSettings {
   socialLinks    Json?
 
   // Pixels / Marketing Credentials
-  metaPixelId       String?
-  metaAccessToken   String?
-  tiktokPixelId     String?
-  tiktokAccessToken String?
+  metaPixelId         String?
+  metaAccessToken     String?
+  metaTestEventCode   String?
+  tiktokPixelId       String?
+  tiktokAccessToken   String?
+  tiktokTestEventCode String?
+  googlePixelId       String?
 
   // Courier Credentials
   steadfastApiKey    String?
@@ -590,4 +596,74 @@ model CourierShipmentHistory {
 
   @@index([orderId])
   @@map("courier_shipment_histories")
+}
+
+enum AnalyticsEventType {
+  SEARCH
+  VIEW
+  ADD_TO_CART
+  INITIATE_CHECKOUT
+  ABANDONED_CART
+  PURCHASE
+}
+
+model ProductAnalyticsEvent {
+  id          String             @id @default(uuid())
+  productId   String
+  eventType   AnalyticsEventType
+  visitorId   String?
+  sessionId   String?
+  searchQuery String?
+  metadata    Json?
+  createdAt   DateTime           @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, eventType, createdAt])
+  @@index([visitorId])
+  @@index([createdAt])
+  @@map("product_analytics_events")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STOCK MOVEMENT & INVENTORY AUDIT TRAIL
+// ─────────────────────────────────────────────────────────────────────────────
+model StockMovement {
+  id            String            @id @default(uuid())
+  productId     String
+  variantId     String?
+  changeType    StockChangeType
+  quantity      Int
+  previousStock Int
+  newStock      Int
+  source        StockChangeSource
+  referenceId   String?
+  note          String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  product Product                    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant ProductVariantCombination? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([referenceId])
+  @@index([createdAt])
+  @@map("stock_movements")
+}
+
+enum StockChangeType {
+  ADD
+  DEDUCT
+  RESTORE
+  ADJUST
+}
+
+enum StockChangeSource {
+  MANUAL_ADD
+  ORDER_PLACED
+  ORDER_CANCELLED
+  ORDER_REFUNDED
+  ORDER_RESHIPPED
+  MANUAL_ADJUSTMENT
+  RETURN_RESTOCK
 }

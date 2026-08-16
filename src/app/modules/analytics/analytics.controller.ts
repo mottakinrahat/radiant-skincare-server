@@ -40,7 +40,7 @@ const getProductAnalyticsList = catchAsync(async (req: Request, res: Response) =
 });
 
 const getSingleProductAnalytics = catchAsync(async (req: Request, res: Response) => {
-  const { productId } = req.params;
+  const productId = req.params.productId as string;
   const { timeRange, startDate, endDate } = req.query as any;
   const result = await AnalyticsServices.getSingleProductAnalytics(productId, {
     timeRange,

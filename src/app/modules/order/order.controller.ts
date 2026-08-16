@@ -3,12 +3,42 @@ import status from "http-status";
 import { sendResponse } from "../../../helpers/sendResponse";
 import { catchAsync } from "../../../helpers/trycatch";
 import { OrderServices } from "./order.services";
+import { UserRole } from "../../../../prisma/generated/prisma";
+import prisma from "../../../shared/prisma";
 
 const createOrder = catchAsync(async (req: Request & { user?: any }, res: Response) => {
   const clientIp = (req.headers["x-forwarded-for"] as string) || req.ip || req.socket.remoteAddress;
   const userAgent = req.headers["user-agent"];
 
-  const result = await OrderServices.createOrder(req.user.email, req.body, { clientIp, userAgent });
+  let userEmail = req.user?.email || req.body?.email || req.body?.shippingAddress?.email;
+  const phone = req.body?.phone || req.body?.shippingAddress?.phoneNumber || req.body?.shippingAddress?.phone || "";
+
+  if (!userEmail) {
+    userEmail = `buyer_${String(phone).replace(/\D/g, "") || Date.now()}@radiantskincare.com`;
+  }
+
+  let user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { email: userEmail },
+        ...(phone ? [{ contactNumber: String(phone) }] : []),
+      ],
+    },
+  });
+
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        name: req.body?.shippingAddress?.name || req.body?.name || "Customer",
+        email: userEmail,
+        contactNumber: phone ? String(phone) : null,
+        role: UserRole.BUYER,
+        password: "guest_buyer_account",
+      },
+    });
+  }
+
+  const result = await OrderServices.createOrder(user.email, req.body, { clientIp, userAgent });
   sendResponse(res, {
     success: true,
     statusCode: status.OK,
@@ -106,7 +136,20 @@ const clearOrderCourierInfo = catchAsync(async (req: Request, res: Response) => 
   });
 });
 
+
+const deleteOrder = catchAsync(async (req: any, res: any) => {
+  const { id } = req.params;
+  const result = await OrderServices.deleteOrder(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: status.OK,
+    message: "Order deleted successfully",
+    data: result,
+  });
+});
+
 export const OrderController = {
+  deleteOrder,
   createOrder,
   getMyOrders,
   getOrderById,

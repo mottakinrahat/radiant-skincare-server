@@ -1,4 +1,4 @@
-﻿import express from "express";
+import express from "express";
 import { userRoutes } from "../modules/User/user.routes";
 import { adminRoutes } from "../modules/admin/admin.routes";
 import { authRoutes } from "../modules/auth/auth.routes";
@@ -7,6 +7,7 @@ import { buyerRoutes } from "../modules/buyer/buyer.routes";
 import { addressRoutes } from "../modules/address/address.routes";
 import { shippingAddressRoutes } from "../modules/shippingAddress/shippingAddress.routes";
 import { productRoutes } from "../modules/product/product.routes";
+import { inventoryRoutes } from "../modules/inventory/inventory.routes";
 import { categoryRoutes } from "../modules/category/category.routes";
 import { brandRoutes } from "../modules/brand/brand.routes";
 import { paymentRoutes } from "../modules/payment/payment.routes";
@@ -77,6 +78,10 @@ const moduleRouter = [
   {
     path: "/products",
     route: productRoutes,
+  },
+  {
+    path: "/inventory",
+    route: inventoryRoutes,
   },
   {
     path: "/categories",

@@ -12,6 +12,7 @@ const buyer_routes_1 = require("../modules/buyer/buyer.routes");
 const address_routes_1 = require("../modules/address/address.routes");
 const shippingAddress_routes_1 = require("../modules/shippingAddress/shippingAddress.routes");
 const product_routes_1 = require("../modules/product/product.routes");
+const inventory_routes_1 = require("../modules/inventory/inventory.routes");
 const category_routes_1 = require("../modules/category/category.routes");
 const brand_routes_1 = require("../modules/brand/brand.routes");
 const payment_routes_1 = require("../modules/payment/payment.routes");
@@ -26,8 +27,13 @@ const geo_routes_1 = require("../modules/geo/geo.routes");
 const courier_routes_1 = require("../modules/courier/courier.routes");
 const landingPage_routes_1 = require("../modules/landingPage/landingPage.routes");
 const abandonedCart_routes_1 = require("../modules/abandonedCart/abandonedCart.routes");
+const analytics_routes_1 = require("../modules/analytics/analytics.routes");
 const router = express_1.default.Router();
 const moduleRouter = [
+    {
+        path: "/analytics",
+        route: analytics_routes_1.analyticsRoutes,
+    },
     {
         path: "/abandoned-cart",
         route: abandonedCart_routes_1.abandonedCartRoutes,
@@ -75,6 +81,10 @@ const moduleRouter = [
     {
         path: "/products",
         route: product_routes_1.productRoutes,
+    },
+    {
+        path: "/inventory",
+        route: inventory_routes_1.inventoryRoutes,
     },
     {
         path: "/categories",

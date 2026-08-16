@@ -22,10 +22,13 @@ const upsertSettings = zod_1.default.object({
         currencySymbol: optionalString,
         socialLinks: zod_1.default.record(zod_1.default.string(), zod_1.default.any()).optional().nullable(),
         // Pixels & Tracking
-        metaPixelId: zod_1.default.string().optional().nullable(),
-        metaAccessToken: zod_1.default.string().optional().nullable(),
-        tiktokPixelId: zod_1.default.string().optional().nullable(),
-        tiktokAccessToken: zod_1.default.string().optional().nullable(),
+        metaPixelId: optionalString,
+        metaAccessToken: optionalString,
+        metaTestEventCode: optionalString,
+        tiktokPixelId: optionalString,
+        tiktokAccessToken: optionalString,
+        tiktokTestEventCode: optionalString,
+        googlePixelId: optionalString,
         // Couriers
         steadfastApiKey: optionalString,
         steadfastSecretKey: optionalString,

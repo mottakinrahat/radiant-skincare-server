@@ -16,17 +16,25 @@ const productVariant_routes_1 = require("../productVariant/productVariant.routes
 const router = express_1.default.Router();
 const adminAuth = (0, auth_1.auth)(prisma_1.UserRole.ADMIN, prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.MANAGER);
 // Product Image Management
-router.post("/:productId/images", adminAuth, fileUploader_1.fileUploader.upload.single("file"), (req, res, next) => {
-    if (req.body.data) {
-        req.body = JSON.parse(req.body.data);
+router.post("/:productId/images", adminAuth, fileUploader_1.fileUploader.upload.any(), (req, res, next) => {
+    var _a;
+    if ((_a = req.body) === null || _a === void 0 ? void 0 : _a.data) {
+        try {
+            req.body = typeof req.body.data === "string" ? JSON.parse(req.body.data) : req.body.data;
+        }
+        catch (e) { }
     }
     return product_controller_1.ProductController.createProductImage(req, res, next);
 });
 router.delete("/images/:imageId", adminAuth, product_controller_1.ProductController.deleteProductImage);
 // Base Product CRUD
-router.post("/", adminAuth, fileUploader_1.fileUploader.upload.single("file"), (req, res, next) => {
-    if (req.body.data) {
-        req.body = JSON.parse(req.body.data);
+router.post("/", adminAuth, fileUploader_1.fileUploader.upload.any(), (req, res, next) => {
+    var _a;
+    if ((_a = req.body) === null || _a === void 0 ? void 0 : _a.data) {
+        try {
+            req.body = typeof req.body.data === "string" ? JSON.parse(req.body.data) : req.body.data;
+        }
+        catch (e) { }
     }
     return product_controller_1.ProductController.createProduct(req, res, next);
 });

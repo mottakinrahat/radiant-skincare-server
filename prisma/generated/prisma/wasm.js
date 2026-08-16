@@ -415,8 +415,11 @@ exports.Prisma.StoreSettingsScalarFieldEnum = {
   socialLinks: 'socialLinks',
   metaPixelId: 'metaPixelId',
   metaAccessToken: 'metaAccessToken',
+  metaTestEventCode: 'metaTestEventCode',
   tiktokPixelId: 'tiktokPixelId',
   tiktokAccessToken: 'tiktokAccessToken',
+  tiktokTestEventCode: 'tiktokTestEventCode',
+  googlePixelId: 'googlePixelId',
   steadfastApiKey: 'steadfastApiKey',
   steadfastSecretKey: 'steadfastSecretKey',
   steadfastBaseUrl: 'steadfastBaseUrl',
@@ -490,6 +493,21 @@ exports.Prisma.ProductAnalyticsEventScalarFieldEnum = {
   searchQuery: 'searchQuery',
   metadata: 'metadata',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.StockMovementScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  variantId: 'variantId',
+  changeType: 'changeType',
+  quantity: 'quantity',
+  previousStock: 'previousStock',
+  newStock: 'newStock',
+  source: 'source',
+  referenceId: 'referenceId',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -586,6 +604,23 @@ exports.AnalyticsEventType = exports.$Enums.AnalyticsEventType = {
   PURCHASE: 'PURCHASE'
 };
 
+exports.StockChangeType = exports.$Enums.StockChangeType = {
+  ADD: 'ADD',
+  DEDUCT: 'DEDUCT',
+  RESTORE: 'RESTORE',
+  ADJUST: 'ADJUST'
+};
+
+exports.StockChangeSource = exports.$Enums.StockChangeSource = {
+  MANUAL_ADD: 'MANUAL_ADD',
+  ORDER_PLACED: 'ORDER_PLACED',
+  ORDER_CANCELLED: 'ORDER_CANCELLED',
+  ORDER_REFUNDED: 'ORDER_REFUNDED',
+  ORDER_RESHIPPED: 'ORDER_RESHIPPED',
+  MANUAL_ADJUSTMENT: 'MANUAL_ADJUSTMENT',
+  RETURN_RESTOCK: 'RETURN_RESTOCK'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserInfo: 'UserInfo',
@@ -614,7 +649,8 @@ exports.Prisma.ModelName = {
   LandingPage: 'LandingPage',
   AbandonedCart: 'AbandonedCart',
   CourierShipmentHistory: 'CourierShipmentHistory',
-  ProductAnalyticsEvent: 'ProductAnalyticsEvent'
+  ProductAnalyticsEvent: 'ProductAnalyticsEvent',
+  StockMovement: 'StockMovement'
 };
 
 /**

@@ -11,9 +11,9 @@ const validateRequest_1 = __importDefault(require("../../middleWares/validateReq
 const storeSettings_controller_1 = require("./storeSettings.controller");
 const storeSettings_validation_1 = require("./storeSettings.validation");
 const router = express_1.default.Router();
-// GET /store-settings — public, fetched by frontend on load for branding
+// GET /store-settings ??? public, fetched by frontend on load for branding
 router.get("/", storeSettings_controller_1.StoreSettingsController.getSettings);
-// PUT /store-settings — admin-only, singleton upsert
-router.put("/", (0, auth_1.auth)(prisma_1.UserRole.ADMIN, prisma_1.UserRole.SUPER_ADMIN), (0, validateRequest_1.default)(storeSettings_validation_1.StoreSettingsValidation.upsertSettings), storeSettings_controller_1.StoreSettingsController.upsertSettings);
-router.patch("/", (0, auth_1.auth)(prisma_1.UserRole.ADMIN, prisma_1.UserRole.SUPER_ADMIN), (0, validateRequest_1.default)(storeSettings_validation_1.StoreSettingsValidation.upsertSettings), storeSettings_controller_1.StoreSettingsController.upsertSettings);
+// PUT / PATCH /store-settings ??? admin & manager, singleton upsert
+router.put("/", (0, auth_1.auth)(prisma_1.UserRole.ADMIN, prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.MANAGER), (0, validateRequest_1.default)(storeSettings_validation_1.StoreSettingsValidation.upsertSettings), storeSettings_controller_1.StoreSettingsController.upsertSettings);
+router.patch("/", (0, auth_1.auth)(prisma_1.UserRole.ADMIN, prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.MANAGER), (0, validateRequest_1.default)(storeSettings_validation_1.StoreSettingsValidation.upsertSettings), storeSettings_controller_1.StoreSettingsController.upsertSettings);
 exports.storeSettingsRoutes = router;
